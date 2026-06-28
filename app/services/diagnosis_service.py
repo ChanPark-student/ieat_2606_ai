@@ -1,86 +1,81 @@
 import uuid
 from typing import Dict, Any
+import logging
 
 from app.schemas.request import DiagnosisRequest
-from app.schemas.response import DiagnosisResponse
-from app.services.product_normalizer import normalize_product_input
-from app.services.category_matcher import match_category
-from app.services.certification_service import diagnose_certification
-from app.services.institution_service import get_institution_guidance
-from app.services.recall_service import summarize_recall_reasons
-from app.services.kc_service import summarize_kc_certifications
+from app.schemas.response import (
+    DiagnosisResponse,
+    CertificationDiagnosis,
+    InstitutionGuidance,
+    RecallReasonSummary,
+    KcCertificationSummary
+)
 from app.services.report_service import generate_markdown_report
 
+logger = logging.getLogger(__name__)
+
 def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> DiagnosisResponse:
-    # Get loaded data
-    master_json = app_data.get("master_json", {})
-    safety_json = app_data.get("safety_json", {})
+    # 7. 절대 하드코딩 판단을 하지 말고, 현재는 입력값 요약과 빈 후보/빈 요약을 반환하는 baseline
     
-    # Extract specific data sets
-    index_data = master_json.get("product_category_index", [])
-    annex_rule = master_json.get("certification_annex_rule", [])
-    process_rule = master_json.get("certification_process_rule", [])
-    domestic_recall = safety_json.get("domestic_recall", [])
-    kc_cert = safety_json.get("kc_certification", [])
+    # 입력값 요약 (request의 필드들을 dict로 변환)
+    input_summary = request.model_dump()
     
-    # Phase 1: Normalize
-    normalized_info = normalize_product_input(request)
-    
-    # Phase 2: Category Match
-    candidates = match_category(normalized_info, index_data)
-    
-    # Phase 3: Certification Diagnosis
-    cert_diagnosis = diagnose_certification(candidates, annex_rule)
-    
-    # Phase 4: Institution Guidance
-    inst_guidance = get_institution_guidance(cert_diagnosis, process_rule)
-    
-    # Phase 5: Recall Search
-    material_kw = normalized_info["key_features"]["material"]
-    recall_summary = summarize_recall_reasons(
-        normalized_info["normalized_product_name"],
-        material_kw,
-        domestic_recall
+    # 빈 구조체 생성
+    empty_cert_diagnosis = CertificationDiagnosis(
+        certification_type="확인 전",
+        applied_standards=[],
+        judgement_level="미정",
+        source_refs=[]
     )
     
-    # Phase 6: KC Summary
-    kc_summary = summarize_kc_certifications(
-        normalized_info["normalized_product_name"],
-        kc_cert
+    empty_inst_guidance = InstitutionGuidance(
+        institution_required=False,
+        summary="안내할 기관 정보가 없습니다.",
+        candidate_institutions=[]
+    )
+    
+    empty_recall_summary = RecallReasonSummary(
+        recall_count=0,
+        top_recall_reasons=[],
+        representative_cases=[],
+        prevention_points=[]
+    )
+    
+    empty_kc_summary = KcCertificationSummary(
+        similar_cert_count=0,
+        top_cert_organ_names=[],
+        representative_models=[],
+        note="유사 KC 인증 정보가 없습니다."
     )
     
     # Build initial response without markdown
     response = DiagnosisResponse(
         case_id=f"case_{uuid.uuid4().hex[:8]}",
         status="success",
-        input_summary=normalized_info,
-        legal_product_candidates=candidates,
-        certification_diagnosis=cert_diagnosis,
-        institution_guidance=inst_guidance,
-        recall_reason_summary=recall_summary,
-        kc_certification_summary=kc_summary,
-        launch_checklist=recall_summary.prevention_points,
+        input_summary=input_summary,
+        legal_product_candidates=[],
+        certification_diagnosis=empty_cert_diagnosis,
+        institution_guidance=empty_inst_guidance,
+        recall_reason_summary=empty_recall_summary,
+        kc_certification_summary=empty_kc_summary,
+        launch_checklist=[],
         final_report_markdown="",
         used_rag_chunk_ids=[],
-        source_refs=["baseline_rule_search"],
-        model_name="Baseline (No LLM)",
-        disclaimer="공공데이터 기반 사전 검토용 안내이며 최종 확인은 관계 기관에 필요합니다."
+        source_refs=[],
+        model_name="Baseline (Template-only)",
+        disclaimer="본 결과는 입력된 데이터를 바탕으로 한 예비 진단 결과이며, 최종 법적 판단 기준이 될 수 없습니다."
     )
     
-    # Phase 7: Markdown Report Generation
+    # Phase 7: Markdown Report Generation with LLM fallback
     try:
         from app.llm.llm_service import generate_llm_report
-        import logging
-        logger = logging.getLogger(__name__)
         
         md_report = generate_llm_report(response)
         response.final_report_markdown = md_report
         from app.core.config import settings
         response.model_name = settings.HF_MODEL_NAME
     except Exception as e:
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.warning(f"LLM report generation failed: {e}. Falling back to template-only report.")
+        logger.warning(f"LLM report generation failed or not configured: {e}. Falling back to template-only report.")
         md_report = generate_markdown_report(response)
         response.final_report_markdown = md_report
         response.model_name = "Baseline (Template-only)"
