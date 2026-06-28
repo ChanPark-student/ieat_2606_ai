@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+
+# Data
+# We might want to keep the directory structure but ignore large content
+# data/safety_json/kc_certification.json
