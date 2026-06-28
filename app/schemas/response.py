@@ -1,0 +1,50 @@
+from pydantic import BaseModel
+from typing import List, Dict, Any, Optional
+
+class LegalProductCandidate(BaseModel):
+    legal_product_name: str
+    display_product_name: str
+    certification_type: str
+    confidence_level: str
+    confidence_score: float
+    needs_user_confirmation: bool
+    match_basis: str
+
+class CertificationDiagnosis(BaseModel):
+    certification_type: str
+    applied_standards: List[str]
+    judgement_level: str
+    source_refs: List[str]
+
+class InstitutionGuidance(BaseModel):
+    institution_required: bool
+    summary: str
+    candidate_institutions: List[str]
+
+class RecallReasonSummary(BaseModel):
+    recall_count: int
+    top_recall_reasons: List[str]
+    representative_cases: List[str]
+    prevention_points: List[str]
+
+class KcCertificationSummary(BaseModel):
+    similar_cert_count: int
+    top_cert_organ_names: List[str]
+    representative_models: List[str]
+    note: str
+
+class DiagnosisResponse(BaseModel):
+    case_id: str
+    status: str
+    input_summary: Dict[str, Any]
+    legal_product_candidates: List[LegalProductCandidate]
+    certification_diagnosis: CertificationDiagnosis
+    institution_guidance: InstitutionGuidance
+    recall_reason_summary: RecallReasonSummary
+    kc_certification_summary: KcCertificationSummary
+    launch_checklist: List[str]
+    final_report_markdown: str
+    used_rag_chunk_ids: List[str]
+    source_refs: List[str]
+    model_name: str
+    disclaimer: str

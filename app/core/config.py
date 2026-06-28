@@ -5,6 +5,10 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Compliance Assistant AI MVP"
     VERSION: str = "1.0.0"
     
+    # Hugging Face Settings
+    HF_TOKEN: str = ""
+    HF_MODEL_NAME: str = "kakaocorp/kanana-1.5-2.1b-instruct-2505"
+    
     # Base paths
     BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
     DATA_DIR: Path = BASE_DIR / "data"
