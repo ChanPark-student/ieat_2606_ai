@@ -1,0 +1,56 @@
+[
+  {
+    "recallProductName": "학생복(교복)",
+    "productItemName": "생활용품>의류잡화",
+    "categoryName": null,
+    "recall_count": 10,
+    "recall_uid_examples": [
+      "10010076",
+      "10010075",
+      "10010074",
+      "10010073",
+      "10010072"
+    ],
+    "reason": "어린이제품 관련 표현은 있으나 현 alias 규칙으로 신뢰 가능한 법정 품목 후보를 찾지 못함"
+  },
+  {
+    "recallProductName": "또봇 손잡이 사각필통",
+    "productItemName": "생활용품>기타 생활용품",
+    "categoryName": null,
+    "recall_count": 1,
+    "recall_uid_examples": [
+      "10001110"
+    ],
+    "reason": "어린이제품 관련 표현은 있으나 현 alias 규칙으로 신뢰 가능한 법정 품목 후보를 찾지 못함"
+  },
+  {
+    "recallProductName": "유아용의류 (바지)",
+    "productItemName": "생활용품>의류잡화",
+    "categoryName": null,
+    "recall_count": 1,
+    "recall_uid_examples": [
+      "10001088"
+    ],
+    "reason": "어린이제품 관련 표현은 있으나 현 alias 규칙으로 신뢰 가능한 법정 품목 후보를 찾지 못함"
+  },
+  {
+    "recallProductName": "인천전자랜드엘리펀츠아동모자",
+    "productItemName": "생활용품>의류잡화",
+    "categoryName": null,
+    "recall_count": 1,
+    "recall_uid_examples": [
+      "10013752"
+    ],
+    "reason": "어린이제품 관련 표현은 있으나 현 alias 규칙으로 신뢰 가능한 법정 품목 후보를 찾지 못함"
+  },
+  {
+    "recallProductName": "학생복",
+    "productItemName": "생활용품>의류잡화",
+    "categoryName": null,
+    "recall_count": 1,
+    "recall_uid_examples": [
+      "10010571"
+    ],
+    "reason": "어린이제품 관련 표현은 있으나 현 alias 규칙으로 신뢰 가능한 법정 품목 후보를 찾지 못함"
+  }
+]

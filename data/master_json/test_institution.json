@@ -1,0 +1,249 @@
+[
+  {
+    "institution_name": "한국건설생활환경시험연구원",
+    "short_name": "KCL",
+    "website_url": "www.kcl.re.kr",
+    "certification_type": "안전인증",
+    "institution_role": "안전인증기관",
+    "product_scope": [
+      "어린이용 물놀이기구",
+      "어린이 놀이기구",
+      "자동차용 어린이보호장치",
+      "어린이용 비비탄총"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전인증 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "한국기계전기전자시험연구원",
+    "short_name": "KTC",
+    "website_url": "www.ktc.re.kr",
+    "certification_type": "안전인증",
+    "institution_role": "안전인증기관",
+    "product_scope": [
+      "어린이용 물놀이기구",
+      "어린이 놀이기구"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전인증 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "FITI시험연구원",
+    "short_name": "FITI",
+    "website_url": "www.fiti.re.kr",
+    "certification_type": "안전인증",
+    "institution_role": "안전인증기관",
+    "product_scope": [
+      "어린이용 물놀이기구",
+      "어린이용 비비탄총"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전인증 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "KOTITI시험연구원",
+    "short_name": "KOTITI",
+    "website_url": "www.kotiti.re.kr",
+    "certification_type": "안전인증",
+    "institution_role": "안전인증기관",
+    "product_scope": [
+      "어린이용 물놀이기구",
+      "어린이용 비비탄총"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전인증 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "한국화학융합시험연구원",
+    "short_name": "KTR",
+    "website_url": "www.ktr.or.kr",
+    "certification_type": "안전인증",
+    "institution_role": "안전인증기관",
+    "product_scope": [
+      "어린이용 물놀이기구",
+      "어린이용 비비탄총"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전인증 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "한국의류시험연구원",
+    "short_name": "KATRI",
+    "website_url": "www.katri.re.kr",
+    "certification_type": "안전인증",
+    "institution_role": "안전인증기관",
+    "product_scope": [
+      "어린이용 물놀이기구",
+      "어린이용 비비탄총"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전인증 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "한국건설생활환경시험연구원",
+    "short_name": "KCL",
+    "website_url": "www.kcl.re.kr",
+    "certification_type": "안전확인",
+    "institution_role": "시험검사기관",
+    "product_scope": [
+      "유아용 섬유제품",
+      "합성수지제 어린이용품",
+      "어린이용 스포츠 보호용품",
+      "어린이용 스케이트보드",
+      "아동용 이단침대",
+      "완구",
+      "유아용 삼륜차",
+      "유아용 의자",
+      "어린이용 자전거",
+      "어린이용 일회용 기저귀",
+      "학용품",
+      "보행기",
+      "유모차",
+      "유아용 침대",
+      "어린이용 온열팩",
+      "유아용 캐리어",
+      "어린이용 스포츠용 구명복"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "한국기계전기전자시험연구원",
+    "short_name": "KTC",
+    "website_url": "www.ktc.re.kr",
+    "certification_type": "안전확인",
+    "institution_role": "시험검사기관",
+    "product_scope": [
+      "유아용 섬유제품",
+      "완구",
+      "유아용 삼륜차",
+      "어린이용 자전거",
+      "어린이용 온열팩",
+      "합성수지제 어린이용품",
+      "어린이용 스케이트보드",
+      "학용품",
+      "보행기",
+      "유모차",
+      "유아용 캐리어",
+      "어린이용 스포츠보호용품"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "한국화학융합시험연구원",
+    "short_name": "KTR",
+    "website_url": "www.ktr.or.kr",
+    "certification_type": "안전확인",
+    "institution_role": "시험검사기관",
+    "product_scope": [
+      "합성수지제 어린이용품",
+      "아동용 이단침대",
+      "완구",
+      "유아용 삼륜차",
+      "유아용 의자",
+      "어린이용 일회용 기저귀",
+      "학용품",
+      "보행기",
+      "유모차",
+      "유아용 침대",
+      "어린이용 온열팩",
+      "유아용 캐리어"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "한국의류시험연구원",
+    "short_name": "KATRI",
+    "website_url": "www.katri.re.kr",
+    "certification_type": "안전확인",
+    "institution_role": "시험검사기관",
+    "product_scope": [
+      "유아용 섬유제품",
+      "합성수지제 어린이용품",
+      "완구",
+      "어린이용 일회용 기저귀",
+      "보행기",
+      "유모차",
+      "유아용 침대",
+      "유아용 캐리어",
+      "어린이용 온열팩"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "FITI시험연구원",
+    "short_name": "FITI",
+    "website_url": "www.fiti.re.kr",
+    "certification_type": "안전확인",
+    "institution_role": "시험검사기관",
+    "product_scope": [
+      "유아용 섬유제품",
+      "합성수지제 어린이용품",
+      "학용품",
+      "보행기",
+      "어린이용 온열팩",
+      "유아용 캐리어",
+      "어린이용 스포츠용 구명복",
+      "완구"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "KOTITI시험연구원",
+    "short_name": "KOTITI",
+    "website_url": "www.kotiti.re.kr",
+    "certification_type": "안전확인",
+    "institution_role": "시험검사기관",
+    "product_scope": [
+      "유아용 섬유제품",
+      "합성수지제 어린이용품",
+      "어린이용 일회용 기저귀",
+      "완구"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "한국에스지에스",
+    "short_name": "SGS",
+    "website_url": "www.sgs.com/ko-kr",
+    "certification_type": "안전확인",
+    "institution_role": "시험검사기관",
+    "product_scope": [
+      "학용품",
+      "완구"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "institution_name": "한국산업기술시험원",
+    "short_name": "KTL",
+    "website_url": "www.ktl.re.kr",
+    "certification_type": "안전확인",
+    "institution_role": "시험검사기관",
+    "product_scope": [
+      "학용품"
+    ],
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전확인 페이지 텍스트 기반",
+    "is_active": true
+  }
+]

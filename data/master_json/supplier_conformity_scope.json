@@ -1,0 +1,211 @@
+[
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_001",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 가죽제품",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용가죽제품 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_002",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 안경테",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용안경테 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_003",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 물안경",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용물안경 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_004",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 우산 및 양산",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용우산및양산 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_005",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 바퀴달린 운동화",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용바퀴달린운동화 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_006",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 롤러스케이트",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용롤러스케이트 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_007",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 스키용구",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용스키용구 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_008",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 스노보드",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용스노보드 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_009",
+    "certification_type": "공급자적합성확인",
+    "product_name": "쇼핑카트 부속품",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "쇼핑카트 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_010",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 장신구",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용장신구 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_011",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 킥보드",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용킥보드 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_012",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 인라인 롤러스케이트",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용인라인롤러스케이트 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_013",
+    "certification_type": "공급자적합성확인",
+    "product_name": "어린이용 가구",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "어린이용 가구 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_014",
+    "certification_type": "공급자적합성확인",
+    "product_name": "아동용 섬유제품",
+    "applied_standards": [
+      "어린이제품 공통안전기준",
+      "아동용 섬유제품 안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  },
+  {
+    "supplier_scope_id": "SUPPLIER_SCOPE_015",
+    "certification_type": "공급자적합성확인",
+    "product_name": "기타 어린이제품",
+    "applied_standards": [
+      "어린이제품 공통안전기준"
+    ],
+    "institution_required": false,
+    "institution_guidance": "지정기관 신고 대상은 아니며, 공급자가 안전기준 적합성을 입증할 수 있는 시험성적서 또는 관련 자료를 확보해야 함",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반",
+    "is_active": true
+  }
+]

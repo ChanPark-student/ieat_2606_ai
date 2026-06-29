@@ -1,0 +1,551 @@
+[
+  {
+    "certification_type": "안전인증",
+    "product_name": "어린이용 물놀이기구",
+    "institution_role": "안전인증기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      },
+      {
+        "institution_name": "FITI시험연구원",
+        "short_name": "FITI",
+        "website_url": "www.fiti.re.kr"
+      },
+      {
+        "institution_name": "KOTITI시험연구원",
+        "short_name": "KOTITI",
+        "website_url": "www.kotiti.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전인증",
+    "product_name": "어린이 놀이기구",
+    "institution_role": "안전인증기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전인증",
+    "product_name": "자동차용 어린이보호장치",
+    "institution_role": "안전인증기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전인증",
+    "product_name": "어린이용 비비탄총",
+    "institution_role": "안전인증기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "FITI시험연구원",
+        "short_name": "FITI",
+        "website_url": "www.fiti.re.kr"
+      },
+      {
+        "institution_name": "KOTITI시험연구원",
+        "short_name": "KOTITI",
+        "website_url": "www.kotiti.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "유아용 섬유제품",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      },
+      {
+        "institution_name": "FITI시험연구원",
+        "short_name": "FITI",
+        "website_url": "www.fiti.re.kr"
+      },
+      {
+        "institution_name": "KOTITI시험연구원",
+        "short_name": "KOTITI",
+        "website_url": "www.kotiti.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "합성수지제 어린이용품",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      },
+      {
+        "institution_name": "FITI시험연구원",
+        "short_name": "FITI",
+        "website_url": "www.fiti.re.kr"
+      },
+      {
+        "institution_name": "KOTITI시험연구원",
+        "short_name": "KOTITI",
+        "website_url": "www.kotiti.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "어린이용 스포츠 보호용품",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "어린이용 스케이트보드",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "아동용 이단침대",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "완구",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      },
+      {
+        "institution_name": "FITI시험연구원",
+        "short_name": "FITI",
+        "website_url": "www.fiti.re.kr"
+      },
+      {
+        "institution_name": "KOTITI시험연구원",
+        "short_name": "KOTITI",
+        "website_url": "www.kotiti.re.kr"
+      },
+      {
+        "institution_name": "한국에스지에스",
+        "short_name": "SGS",
+        "website_url": "www.sgs.com/ko-kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "유아용 삼륜차",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "유아용 의자",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "어린이용 자전거",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "어린이용 일회용 기저귀",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      },
+      {
+        "institution_name": "KOTITI시험연구원",
+        "short_name": "KOTITI",
+        "website_url": "www.kotiti.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "학용품",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "FITI시험연구원",
+        "short_name": "FITI",
+        "website_url": "www.fiti.re.kr"
+      },
+      {
+        "institution_name": "한국에스지에스",
+        "short_name": "SGS",
+        "website_url": "www.sgs.com/ko-kr"
+      },
+      {
+        "institution_name": "한국산업기술시험원",
+        "short_name": "KTL",
+        "website_url": "www.ktl.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "보행기",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      },
+      {
+        "institution_name": "FITI시험연구원",
+        "short_name": "FITI",
+        "website_url": "www.fiti.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "유모차",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "유아용 침대",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "어린이용 온열팩",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      },
+      {
+        "institution_name": "FITI시험연구원",
+        "short_name": "FITI",
+        "website_url": "www.fiti.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "유아용 캐리어",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      },
+      {
+        "institution_name": "한국화학융합시험연구원",
+        "short_name": "KTR",
+        "website_url": "www.ktr.or.kr"
+      },
+      {
+        "institution_name": "한국의류시험연구원",
+        "short_name": "KATRI",
+        "website_url": "www.katri.re.kr"
+      },
+      {
+        "institution_name": "FITI시험연구원",
+        "short_name": "FITI",
+        "website_url": "www.fiti.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "어린이용 스포츠용 구명복",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국건설생활환경시험연구원",
+        "short_name": "KCL",
+        "website_url": "www.kcl.re.kr"
+      },
+      {
+        "institution_name": "FITI시험연구원",
+        "short_name": "FITI",
+        "website_url": "www.fiti.re.kr"
+      }
+    ]
+  },
+  {
+    "certification_type": "안전확인",
+    "product_name": "어린이용 스포츠보호용품",
+    "institution_role": "시험검사기관",
+    "institutions": [
+      {
+        "institution_name": "한국기계전기전자시험연구원",
+        "short_name": "KTC",
+        "website_url": "www.ktc.re.kr"
+      }
+    ]
+  }
+]

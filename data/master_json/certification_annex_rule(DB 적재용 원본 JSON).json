@@ -1,0 +1,723 @@
+[
+  {
+    "rule_id": "CHILD-A1-1",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 1",
+    "article_ref": "제2조제1항 관련",
+    "certification_type": "안전인증",
+    "item_no": "1",
+    "product_name": "어린이용 물놀이기구",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 물놀이기구 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 1] 안전인증대상어린이제품의 종류 및 적용 안전기준(제2조제1항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "물놀이",
+      "물놀이기구",
+      "수영 보조용품",
+      "어린이용 물놀이기구",
+      "튜브"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A1-2",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 1",
+    "article_ref": "제2조제1항 관련",
+    "certification_type": "안전인증",
+    "item_no": "2",
+    "product_name": "어린이 놀이기구",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이 놀이기구 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 1] 안전인증대상어린이제품의 종류 및 적용 안전기준(제2조제1항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "그네",
+      "놀이시설",
+      "미끄럼틀",
+      "어린이 놀이기구"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A1-3",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 1",
+    "article_ref": "제2조제1항 관련",
+    "certification_type": "안전인증",
+    "item_no": "3",
+    "product_name": "자동차용 어린이 보호장치",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "자동차용 어린이 보호장치 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 1] 안전인증대상어린이제품의 종류 및 적용 안전기준(제2조제1항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "부스터시트",
+      "자동차용 어린이 보호장치",
+      "카시트"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A1-4",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 1",
+    "article_ref": "제2조제1항 관련",
+    "certification_type": "안전인증",
+    "item_no": "4",
+    "product_name": "어린이용 비비탄총",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 비비탄총 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 1] 안전인증대상어린이제품의 종류 및 적용 안전기준(제2조제1항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "BB탄총",
+      "비비탄총",
+      "어린이용 비비탄총"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-1",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "1",
+    "product_name": "유아용 섬유제품",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "유아용 섬유제품 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "기저귀커버",
+      "섬유제품",
+      "신생아용품",
+      "아기 옷",
+      "유아복",
+      "유아용 섬유제품",
+      "턱받이"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-2",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "2",
+    "product_name": "합성수지제 어린이제품",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "합성수지제 어린이제품 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "PVC 어린이용품",
+      "플라스틱 어린이용품",
+      "합성수지",
+      "합성수지제 어린이제품"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-3",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "3",
+    "product_name": "어린이용 스포츠 보호용품(보호 장구 및 안전모)",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 스포츠보호용품 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "스포츠 보호용품(보호 장구 및 안전모)",
+      "어린이용 스포츠 보호용품(보호 장구 및 안전모)"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-4",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "4",
+    "product_name": "어린이용 스케이트보드",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 스케이트보드 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "스케이트보드",
+      "어린이용 스케이트보드"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-5",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "5",
+    "product_name": "아동용 이단침대",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "아동용 이단침대 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "아동용 이단침대",
+      "이단침대"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-6",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "6",
+    "product_name": "완구",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "완구 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "블록",
+      "완구",
+      "인형",
+      "장난감",
+      "캐릭터 완구",
+      "토이"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-7",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "7",
+    "product_name": "유아용 삼륜차",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "유아용 삼륜차 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "삼륜차",
+      "유아용 삼륜차"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-8",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "8",
+    "product_name": "유아용 의자",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "유아용 의자 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "아기의자",
+      "유아용 의자",
+      "유아의자",
+      "의자",
+      "하이체어"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-9",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "9",
+    "product_name": "어린이용 자전거",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 자전거 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "어린이 자전거",
+      "어린이용 자전거",
+      "자전거",
+      "키즈 자전거"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-10",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "10",
+    "product_name": "삭제",
+    "common_safety_standard": null,
+    "product_safety_standard": null,
+    "note": "2018. 4. 19. 삭제",
+    "is_deleted": true,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": []
+  },
+  {
+    "rule_id": "CHILD-A2-11",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "11",
+    "product_name": "학용품",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "학용품 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "문구",
+      "색연필",
+      "연필",
+      "크레파스",
+      "필통",
+      "학교용품",
+      "학용품"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-12",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "12",
+    "product_name": "보행기",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "보행기 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "보행기"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-13",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "13",
+    "product_name": "유모차",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "유모차 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "유모차"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-14",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "14",
+    "product_name": "유아용 침대",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "유아용 침대 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "아기침대",
+      "유아용 침대",
+      "유아침대",
+      "침대"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-15",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "15",
+    "product_name": "어린이용 온열팩 (주머니난로 포함)",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 온열팩 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "어린이용 온열팩 (주머니난로 포함)",
+      "온열팩 (주머니난로 포함)"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-16",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "16",
+    "product_name": "유아용 캐리어",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "유아용 캐리어 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "유아용 캐리어",
+      "캐리어"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-17",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "17",
+    "product_name": "어린이용 스포츠용 구명복",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 스포츠용 구명복 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "스포츠용 구명복",
+      "어린이용 스포츠용 구명복"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A2-18",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 2",
+    "article_ref": "제2조제2항 관련",
+    "certification_type": "안전확인",
+    "item_no": "18",
+    "product_name": "비수면용 기울어진 요람",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "비수면용 기울어진 요람 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 2] 안전확인대상어린이제품의 종류 및 적용 안전기준(제2조제2항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "비수면용 기울어진 요람"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-가",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "가",
+    "product_name": "어린이용 가죽제품",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 가죽제품 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "가죽 벨트",
+      "가죽 지갑",
+      "가죽제품",
+      "어린이 가죽가방",
+      "어린이용 가죽제품"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-나",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "나",
+    "product_name": "삭제",
+    "common_safety_standard": null,
+    "product_safety_standard": null,
+    "note": "2018. 4. 19. 삭제",
+    "is_deleted": true,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": []
+  },
+  {
+    "rule_id": "CHILD-A3-다",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "다",
+    "product_name": "어린이용 안경테(선글라스를 포함한다)",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 안경테 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "안경테(선글라스를 포함한다)",
+      "어린이용 안경테(선글라스를 포함한다)"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-라",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "라",
+    "product_name": "어린이용 물안경",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 물안경 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "물안경",
+      "어린이용 물안경"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-마",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "마",
+    "product_name": "어린이용 우산 및 양산",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 우산 및 양산 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "양산",
+      "어린이 우산",
+      "어린이용 우산 및 양산",
+      "우산 및 양산",
+      "키즈 우산"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-바",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "바",
+    "product_name": "어린이용 바퀴달린 운동화",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 바퀴 달린 운동화 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "바퀴달린 운동화",
+      "어린이용 바퀴달린 운동화"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-사",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "사",
+    "product_name": "어린이용 롤러스케이트",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 롤러스케이트 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "롤러스케이트",
+      "어린이용 롤러스케이트"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-아",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "아",
+    "product_name": "어린이용 스키용구",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 스키 용구 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "스키용구",
+      "어린이용 스키용구"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-자",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "자",
+    "product_name": "어린이용 스노보드",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 스노보드 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "스노보드",
+      "어린이용 스노보드"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-차",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "차",
+    "product_name": "쇼핑카트 부속품",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "쇼핑카트 부속품 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "쇼핑카트 부속품"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-카",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "카",
+    "product_name": "어린이용 장신구",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 장신구 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "머리핀",
+      "목걸이",
+      "반지",
+      "액세서리",
+      "어린이용 장신구",
+      "장신구",
+      "팔찌"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-타",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "타",
+    "product_name": "어린이용 킥보드",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 킥보드 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "스쿠터",
+      "어린이용 킥보드",
+      "킥보드"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-파",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "파",
+    "product_name": "어린이용 인라인 롤러스케이트",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 인라인 롤러스케이트 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "어린이용 인라인 롤러스케이트",
+      "인라인 롤러스케이트"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-하",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "하",
+    "product_name": "어린이용 가구",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "어린이용 가구 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "가구",
+      "어린이용 가구"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-거",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "거",
+    "product_name": "아동용 섬유제품",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": "아동용 섬유제품 안전기준",
+    "note": null,
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "섬유제품",
+      "아동복",
+      "아동용 가방",
+      "아동용 섬유제품",
+      "어린이 옷",
+      "어린이 책가방",
+      "초등학생 가방",
+      "키즈 의류"
+    ]
+  },
+  {
+    "rule_id": "CHILD-A3-2",
+    "law_name": "어린이제품 안전 특별법 시행규칙",
+    "annex_no": "별표 3",
+    "article_ref": "제2조제3항 관련",
+    "certification_type": "공급자적합성확인",
+    "item_no": "2",
+    "product_name": "개별 안전기준이 없는 공급자적합성확인대상어린이제품",
+    "common_safety_standard": "어린이제품 공통안전기준",
+    "product_safety_standard": null,
+    "note": "개별 안전기준이 없는 공급자적합성확인대상어린이제품은 어린이제품 공통안전기준을 적용한다.",
+    "is_deleted": false,
+    "source_file": "[별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf",
+    "keywords": [
+      "개별 안전기준이 없는 공급자적합성확인대상어린이제품"
+    ]
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "process_rule_id": "PROC_SAFETY_CERTIFICATION",
+    "certification_type": "안전인증",
+    "legal_basis": "어린이제품 안전 특별법 제15조, 제17조",
+    "summary": "안전인증대상어린이제품의 제조업자 또는 수입업자가 안전인증기관에 신청하고, 제품검사와 공장검사를 거쳐 안전인증서를 발급받은 후 안전인증 표시를 하여 판매하는 제도",
+    "institution_required": true,
+    "institution_role": "안전인증기관",
+    "workflow": [
+      "안전인증 신청",
+      "제품검사",
+      "공장검사",
+      "안전인증서 발급",
+      "안전인증 표시 후 판매"
+    ],
+    "required_documents": [
+      "안전인증 신청서",
+      "제품 설명서",
+      "제품검사 관련 자료",
+      "공장검사 관련 자료"
+    ],
+    "form_refs": [
+      "별지 제14호 서식",
+      "별지 제15호 서식",
+      "별표 7"
+    ],
+    "mutual_recognition_note": "현재 계약 체결 기관 없음",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전인증 페이지 텍스트 기반"
+  },
+  {
+    "process_rule_id": "PROC_SAFETY_CHECK",
+    "certification_type": "안전확인",
+    "legal_basis": "어린이제품 안전 특별법 제22조",
+    "summary": "안전확인대상어린이제품의 제조업자 또는 수입업자가 출고 또는 통관 전에 모델별로 지정 시험검사기관의 시험검사를 받아 안전기준 적합성을 확인한 후 안전인증기관에 신고하는 제도",
+    "institution_required": true,
+    "institution_role": "시험검사기관 및 안전인증기관",
+    "workflow": [
+      "안전확인 신청",
+      "지정 시험검사기관의 제품 시험검사",
+      "안전확인 신고",
+      "안전확인 신고확인증 교부",
+      "안전확인 표시 후 판매"
+    ],
+    "required_documents": [
+      "사업자등록증 사본",
+      "제품 설명서",
+      "안전확인대상어린이제품 시험검사기관의 안전성검사결과서",
+      "안전확인 신고서"
+    ],
+    "form_refs": [
+      "별지 제22호 서식"
+    ],
+    "mutual_recognition_note": "현재 계약 체결 기관 없음",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 안전확인 페이지 텍스트 기반"
+  },
+  {
+    "process_rule_id": "PROC_SUPPLIER_CONFORMITY",
+    "certification_type": "공급자적합성확인",
+    "legal_basis": "어린이제품 안전 특별법 제25조",
+    "summary": "공급자적합성확인대상어린이제품의 제조업자 또는 수입업자가 해당 제품이 안전기준에 적합한지 스스로 확인하고 공급자적합성확인 표시를 하는 제도",
+    "institution_required": false,
+    "institution_role": "지정기관 필수 아님",
+    "workflow": [
+      "공급자적합성확인기준 적합 여부 확인",
+      "시험성적서 또는 적합성 입증자료 확보",
+      "공급자적합성확인",
+      "공급자적합성확인 표시",
+      "관련 증빙서류 보관"
+    ],
+    "required_documents": [
+      "공인시험기관의 시험성적서",
+      "자체 시험성적서",
+      "원부자재 업체의 시험성적서",
+      "외국의 공인기관 또는 기업의 시험성적서",
+      "기타 안전기준에 적합함을 입증할 수 있는 자료"
+    ],
+    "form_refs": [
+      "별표 12"
+    ],
+    "mutual_recognition_note": "공급자가 적합성을 입증하는 구조이므로 지정 시험검사기관 신고 제도와 구분 필요",
+    "source_type": "USER_PASTED_SAFETYKOREA_TEXT",
+    "source_name": "SafetyKorea 어린이제품 공급자적합성확인 페이지 텍스트 기반"
+  }
+]

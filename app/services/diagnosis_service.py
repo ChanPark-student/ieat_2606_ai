@@ -12,6 +12,7 @@ from app.schemas.response import (
 )
 from app.services.report_service import generate_markdown_report
 from app.services.category_matcher import match_category
+from app.services.certification_service import diagnose_certification
 
 logger = logging.getLogger(__name__)
 
@@ -30,14 +31,22 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
         logger.warning(f"category matching failed, returning empty candidates: {e}")
         legal_product_candidates = []
 
-    # 빈 구조체 생성
-    empty_cert_diagnosis = CertificationDiagnosis(
-        certification_type="확인 전",
-        applied_standards=[],
-        judgement_level="미정",
-        source_refs=[]
-    )
-    
+    # Phase 3: 인증유형 및 안전기준 조회
+    try:
+        cert_diagnosis, launch_checklist, cert_source_refs = diagnose_certification(
+            legal_product_candidates, app_data
+        )
+    except Exception as e:
+        logger.warning(f"certification diagnosis failed: {e}")
+        cert_diagnosis = CertificationDiagnosis(
+            certification_type="확인 전",
+            applied_standards=[],
+            judgement_level="미정",
+            source_refs=[],
+        )
+        launch_checklist = []
+        cert_source_refs = []
+
     empty_inst_guidance = InstitutionGuidance(
         institution_required=False,
         summary="안내할 기관 정보가 없습니다.",
@@ -64,14 +73,14 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
         status="success",
         input_summary=input_summary,
         legal_product_candidates=legal_product_candidates,
-        certification_diagnosis=empty_cert_diagnosis,
+        certification_diagnosis=cert_diagnosis,
         institution_guidance=empty_inst_guidance,
         recall_reason_summary=empty_recall_summary,
         kc_certification_summary=empty_kc_summary,
-        launch_checklist=[],
+        launch_checklist=launch_checklist,
         final_report_markdown="",
         used_rag_chunk_ids=[],
-        source_refs=[],
+        source_refs=cert_source_refs,
         model_name="Baseline (Template-only)",
         disclaimer="본 결과는 입력된 데이터를 바탕으로 한 예비 진단 결과이며, 최종 법적 판단 기준이 될 수 없습니다."
     )

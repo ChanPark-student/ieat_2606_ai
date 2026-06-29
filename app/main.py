@@ -25,27 +25,29 @@ async def lifespan(app: FastAPI):
     # Load data on startup
     logger.info("Loading baseline JSON data...")
     
-    # Load master_json (핸드오프 문서 §3.2 기준 9개 파일)
-    master_files = [
-        "product_category_index.json",
-        "product_category_dictionary.json",
-        "certification_annex_rule.json",
-        "certification_process_rule.json",
-        "safety_standard_document.json",
-        "safety_standard_check_item.json",
-        "test_institution.json",
-        "institution_scope.json",
-        "supplier_conformity_scope.json",
-    ]
-    for filename in master_files:
+    # Load master_json: {실제파일명: app_data 키} 매핑
+    # 실제 업로드된 파일명이 예상과 다를 수 있으므로 명시적으로 매핑
+    master_file_map = {
+        "product_category_index.json": "product_category_index",
+        "product_category_dictionary.json": "product_category_dictionary",
+        "product_category_alias.json": "product_category_alias",
+        "certification_annex_rule(DB 적재용 원본 JSON).json": "certification_annex_rule",
+        "certification_process_rule.json": "certification_process_rule",
+        "safety_standard_document.json": "safety_standard_document",
+        "safety_standard_check_items.json": "safety_standard_check_items",
+        "test_institution.json": "test_institution",
+        "institution_scope.json": "institution_scope",
+        "supplier_conformity_scope.json": "supplier_conformity_scope",
+        "product_institution_lookup.json": "product_institution_lookup",
+    }
+    for filename, key_name in master_file_map.items():
         filepath = settings.MASTER_JSON_DIR / filename
-        name_key = filename.replace(".json", "")
         if filepath.exists():
-            app_data["master_json"][name_key] = load_json(filepath)
-            logger.info(f"Loaded {filename}")
+            app_data["master_json"][key_name] = load_json(filepath)
+            logger.info(f"Loaded master_json/{filename} → key '{key_name}'")
         else:
-            app_data["master_json"][name_key] = []
-            logger.warning(f"Not found (skipped): {filename}")
+            app_data["master_json"][key_name] = []
+            logger.warning(f"Not found (skipped): master_json/{filename}")
             
     # Load safety_json
     safety_files = [

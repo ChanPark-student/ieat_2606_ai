@@ -1,0 +1,1131 @@
+{
+  "어린이용 물놀이기구": {
+    "display_product_name": "어린이용 물놀이기구",
+    "certification_type": "안전인증",
+    "annex_no": "별표 1",
+    "aliases": [
+      "공기주입식 물놀이기구",
+      "구명튜브",
+      "물놀이",
+      "물놀이 튜브",
+      "물놀이기구",
+      "수영 보조용품",
+      "아동용 튜브",
+      "암링",
+      "어린이 튜브",
+      "어린이용 물놀이기구",
+      "어린이용물놀이기구",
+      "키즈 튜브",
+      "튜브"
+    ],
+    "product_safety_standard": "어린이용 물놀이기구 안전기준",
+    "institution_role": "안전인증기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC",
+      "FITI",
+      "KOTITI",
+      "KTR",
+      "KATRI"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품",
+      "날카로운 가장자리/끝"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이 놀이기구": {
+    "display_product_name": "어린이 놀이기구",
+    "certification_type": "안전인증",
+    "annex_no": "별표 1",
+    "aliases": [
+      "그네",
+      "놀이시설",
+      "놀이터 기구",
+      "미끄럼틀",
+      "시소",
+      "어린이 놀이기구",
+      "어린이 놀이터",
+      "어린이놀이기구",
+      "유아용 미끄럼틀",
+      "정글짐"
+    ],
+    "product_safety_standard": "어린이 놀이기구 안전기준",
+    "institution_role": "안전인증기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC"
+    ],
+    "hazard_keywords": [
+      "유해원소",
+      "폼알데하이드",
+      "아릴아민/아조염료",
+      "표시사항",
+      "작은 부품",
+      "끈/코드",
+      "온도상승/과열"
+    ],
+    "needs_user_confirmation": true
+  },
+  "자동차용 어린이 보호장치": {
+    "display_product_name": "자동차용 어린이 보호장치",
+    "certification_type": "안전인증",
+    "annex_no": "별표 1",
+    "aliases": [
+      "부스터 시트",
+      "부스터시트",
+      "아동용 카시트",
+      "어린이 카시트",
+      "유아 카시트",
+      "유아용 카시트",
+      "자동차용 어린이 보호장치",
+      "자동차용 어린이보호장치",
+      "자동차용어린이보호장치",
+      "주니어 카시트",
+      "카시트"
+    ],
+    "product_safety_standard": "자동차용 어린이 보호장치 안전기준",
+    "institution_role": "안전인증기관",
+    "institution_short_names": [
+      "KCL"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "폼알데하이드",
+      "표시사항",
+      "주의/경고 표시",
+      "날카로운 가장자리/끝"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 비비탄총": {
+    "display_product_name": "어린이용 비비탄총",
+    "certification_type": "안전인증",
+    "annex_no": "별표 1",
+    "aliases": [
+      "BB탄총",
+      "비비탄 총",
+      "비비탄총",
+      "어린이 BB탄총",
+      "어린이용 비비탄총",
+      "어린이용비비탄총",
+      "에어소프트건"
+    ],
+    "product_safety_standard": "어린이용 비비탄총 안전기준",
+    "institution_role": "안전인증기관",
+    "institution_short_names": [
+      "KCL",
+      "FITI",
+      "KOTITI",
+      "KTR",
+      "KATRI"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품",
+      "날카로운 가장자리/끝"
+    ],
+    "needs_user_confirmation": true
+  },
+  "유아용 섬유제품": {
+    "display_product_name": "유아용 섬유제품",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "기저귀커버",
+      "배냇저고리",
+      "섬유제품",
+      "신생아복",
+      "신생아용품",
+      "아기 옷",
+      "아기옷",
+      "유섬",
+      "유아 양말",
+      "유아복",
+      "유아용 모자",
+      "유아용 섬유",
+      "유아용 섬유제품",
+      "유아용섬유제품",
+      "침받이",
+      "턱받이"
+    ],
+    "product_safety_standard": "유아용 섬유제품 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC",
+      "KATRI",
+      "FITI",
+      "KOTITI"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "폼알데하이드",
+      "아릴아민/아조염료",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품"
+    ],
+    "needs_user_confirmation": true
+  },
+  "합성수지제 어린이제품": {
+    "display_product_name": "합성수지제 어린이제품",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "PVC 어린이용품",
+      "놀이매트",
+      "바닥매트",
+      "어린이 매트",
+      "유아매트",
+      "플라스틱 어린이용품",
+      "합성수지",
+      "합성수지 어린이용품",
+      "합성수지제 어린이용품",
+      "합성수지제 어린이제품",
+      "합성수지제어린이용품",
+      "합성수지제어린이제품"
+    ],
+    "product_safety_standard": "합성수지제 어린이제품 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC",
+      "KTR",
+      "KATRI",
+      "FITI",
+      "KOTITI"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "폼알데하이드",
+      "아릴아민/아조염료",
+      "표시사항",
+      "주의/경고 표시"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 스포츠 보호용품(보호 장구 및 안전모)": {
+    "display_product_name": "어린이용 스포츠 보호용품",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "롤러스포츠보호장구",
+      "무릎보호대",
+      "보호 장구",
+      "보호장구",
+      "스포츠 보호대",
+      "스포츠 보호용품(보호 장구 및 안전모)",
+      "안전모",
+      "어린이용 스포츠 보호용품",
+      "어린이용 스포츠 보호용품(보호 장구 및 안전모)",
+      "어린이용 스포츠보호용품",
+      "어린이용스포츠보호용품(보호장구및안전모)",
+      "팔꿈치보호대",
+      "헬멧"
+    ],
+    "product_safety_standard": "어린이용 스포츠보호용품 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL"
+    ],
+    "hazard_keywords": [
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품",
+      "날카로운 가장자리/끝",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 스케이트보드": {
+    "display_product_name": "어린이용 스케이트보드",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "스케이트보드",
+      "어린이 스케이트보드",
+      "어린이용 스케이트보드",
+      "어린이용스케이트보드",
+      "전동킥보드(스케이트보드)",
+      "키즈 스케이트보드"
+    ],
+    "product_safety_standard": "어린이용 스케이트보드 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "유해원소",
+      "표시사항",
+      "주의/경고 표시",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "아동용 이단침대": {
+    "display_product_name": "아동용 이단침대",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "2단침대",
+      "아동 이단침대",
+      "아동용 이단침대",
+      "아동용이단침대",
+      "어린이 이단침대",
+      "이단침대",
+      "키즈 이단침대"
+    ],
+    "product_safety_standard": "아동용 이단침대 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTR"
+    ],
+    "hazard_keywords": [
+      "표시사항",
+      "주의/경고 표시",
+      "날카로운 가장자리/끝",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "완구": {
+    "display_product_name": "완구",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "게임완구",
+      "기타완구",
+      "레고",
+      "모형완구",
+      "미술공예 완구",
+      "발사체 완구",
+      "볼풀공",
+      "블록",
+      "슬라임",
+      "승용 완구",
+      "액체괴물",
+      "역할놀이 완구",
+      "완구",
+      "완구류",
+      "유아승용완구",
+      "인형",
+      "자석완구",
+      "작동완구",
+      "장난감",
+      "캐릭터 완구",
+      "토이",
+      "풍선",
+      "플라스틱 완구",
+      "핑거페인트"
+    ],
+    "product_safety_standard": "완구 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC",
+      "KTR",
+      "KATRI",
+      "FITI",
+      "KOTITI",
+      "SGS"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "폼알데하이드",
+      "아릴아민/아조염료",
+      "표시사항",
+      "주의/경고 표시"
+    ],
+    "needs_user_confirmation": true
+  },
+  "유아용 삼륜차": {
+    "display_product_name": "유아용 삼륜차",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "삼륜차",
+      "세발자전거",
+      "아기 삼륜차",
+      "어린이 삼륜차",
+      "유아 삼륜차",
+      "유아용 삼륜차",
+      "유아용삼륜차"
+    ],
+    "product_safety_standard": "유아용 삼륜차 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC",
+      "KTR"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "유아용 의자": {
+    "display_product_name": "유아용 의자",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "부스터의자",
+      "아기 의자",
+      "아기의자",
+      "유아 식탁의자",
+      "유아용 식탁의자",
+      "유아용 의자",
+      "유아용의자",
+      "유아의자",
+      "의자",
+      "하이체어"
+    ],
+    "product_safety_standard": "유아용 의자 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTR"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "폼알데하이드",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 자전거": {
+    "display_product_name": "어린이용 자전거",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "아동 자전거",
+      "아동용 자전거",
+      "어린이 이륜자전거",
+      "어린이 자전거",
+      "어린이용 자전거",
+      "어린이용자전거",
+      "이륜자전거",
+      "자전거",
+      "키즈 자전거"
+    ],
+    "product_safety_standard": "어린이용 자전거 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "표시사항",
+      "주의/경고 표시",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "학용품": {
+    "display_product_name": "학용품",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "가위",
+      "공책",
+      "노트",
+      "문구",
+      "물감",
+      "미술용품",
+      "볼펜",
+      "붓",
+      "색연필",
+      "샤프",
+      "수첩",
+      "연필",
+      "연필류",
+      "연필심",
+      "자",
+      "지우개",
+      "크레용",
+      "크레파스",
+      "클립",
+      "펜",
+      "풀",
+      "필통",
+      "학교용품",
+      "학용품"
+    ],
+    "product_safety_standard": "학용품 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC",
+      "KTR",
+      "FITI",
+      "SGS",
+      "KTL"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "폼알데하이드",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품"
+    ],
+    "needs_user_confirmation": true
+  },
+  "보행기": {
+    "display_product_name": "보행기",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "보행 보조기",
+      "보행기",
+      "아기 보행기",
+      "유아 보행기"
+    ],
+    "product_safety_standard": "보행기 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC",
+      "KTR",
+      "KATRI",
+      "FITI"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "유해원소",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품",
+      "날카로운 가장자리/끝",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "유모차": {
+    "display_product_name": "유모차",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "디럭스 유모차",
+      "쌍둥이 유모차",
+      "유모차",
+      "유아차",
+      "절충형 유모차",
+      "휴대용 유모차"
+    ],
+    "product_safety_standard": "유모차 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC",
+      "KTR",
+      "KATRI"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "유해원소",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "유아용 침대": {
+    "display_product_name": "유아용 침대",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "베이비 침대",
+      "아기 요람",
+      "아기 침대",
+      "아기침대",
+      "유아용 요람",
+      "유아용 침대",
+      "유아용침대",
+      "유아침대",
+      "침대"
+    ],
+    "product_safety_standard": "유아용 침대 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTR",
+      "KATRI"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "폼알데하이드",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 온열팩 (주머니난로 포함)": {
+    "display_product_name": "어린이용 온열팩",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "손난로",
+      "어린이 핫팩",
+      "어린이용 온열팩",
+      "어린이용 온열팩 (주머니난로 포함)",
+      "어린이용 핫팩",
+      "어린이용온열팩(주머니난로포함)",
+      "온열팩",
+      "온열팩 (주머니난로 포함)",
+      "주머니난로",
+      "핫팩"
+    ],
+    "product_safety_standard": "어린이용 온열팩 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC",
+      "KTR",
+      "KATRI",
+      "FITI"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "표시사항",
+      "주의/경고 표시",
+      "온도상승/과열"
+    ],
+    "needs_user_confirmation": true
+  },
+  "유아용 캐리어": {
+    "display_product_name": "유아용 캐리어",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "베이비 캐리어",
+      "아기 캐리어",
+      "아기띠",
+      "유아 캐리어",
+      "유아용 캐리어",
+      "유아용캐리어",
+      "캐리어",
+      "힙시트"
+    ],
+    "product_safety_standard": "유아용 캐리어 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "KTC",
+      "KTR",
+      "KATRI",
+      "FITI"
+    ],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "유해원소",
+      "폼알데하이드",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 스포츠용 구명복": {
+    "display_product_name": "어린이용 스포츠용 구명복",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "구명복",
+      "구명조끼",
+      "스포츠용 구명복",
+      "스포츠용구명복",
+      "어린이 구명복",
+      "어린이용 구명조끼",
+      "어린이용 스포츠 구명복",
+      "어린이용 스포츠용 구명복",
+      "어린이용스포츠용구명복"
+    ],
+    "product_safety_standard": "어린이용 스포츠용 구명복 안전기준",
+    "institution_role": "시험검사기관",
+    "institution_short_names": [
+      "KCL",
+      "FITI"
+    ],
+    "hazard_keywords": [
+      "카드뮴",
+      "표시사항",
+      "주의/경고 표시",
+      "날카로운 가장자리/끝",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "비수면용 기울어진 요람": {
+    "display_product_name": "비수면용 기울어진 요람",
+    "certification_type": "안전확인",
+    "annex_no": "별표 2",
+    "aliases": [
+      "기울어진 요람",
+      "바운서",
+      "비수면 요람",
+      "비수면용 기울어진 요람",
+      "비수면용 요람",
+      "비수면용기울어진요람",
+      "인클라인드 슬리퍼"
+    ],
+    "product_safety_standard": "비수면용 기울어진 요람 안전기준",
+    "institution_role": "",
+    "institution_short_names": [],
+    "hazard_keywords": [],
+    "needs_user_confirmation": true
+  },
+  "어린이용 가죽제품": {
+    "display_product_name": "어린이용 가죽제품",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "가죽 가방",
+      "가죽 벨트",
+      "가죽 신발",
+      "가죽 지갑",
+      "가죽가방",
+      "가죽제품",
+      "신발(어린이용 가죽제품)",
+      "어린이 가죽가방",
+      "어린이 가죽제품",
+      "어린이용 가죽 신발",
+      "어린이용 가죽제품",
+      "어린이용가죽제품"
+    ],
+    "product_safety_standard": "어린이용 가죽제품 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "폼알데하이드",
+      "아릴아민/아조염료",
+      "표시사항",
+      "주의/경고 표시"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 안경테(선글라스를 포함한다)": {
+    "display_product_name": "어린이용 안경테",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "선글라스",
+      "안경테",
+      "안경테(선글라스를 포함한다)",
+      "어린이 선글라스",
+      "어린이 안경테",
+      "어린이용 선글라스",
+      "어린이용 안경테",
+      "어린이용 안경테(선글라스를 포함한다)",
+      "어린이용안경테(선글라스를포함한다)",
+      "키즈 안경테"
+    ],
+    "product_safety_standard": "어린이용 안경테 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "표시사항"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 물안경": {
+    "display_product_name": "어린이용 물안경",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "물안경",
+      "수경",
+      "어린이 물안경",
+      "어린이용 물안경",
+      "어린이용 수경",
+      "어린이용물안경"
+    ],
+    "product_safety_standard": "어린이용 물안경 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품",
+      "날카로운 가장자리/끝"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 우산 및 양산": {
+    "display_product_name": "어린이용 우산 및 양산",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "양산",
+      "어린이 양산",
+      "어린이 우산",
+      "어린이용 우산",
+      "어린이용 우산 및 양산",
+      "어린이용우산및양산",
+      "우산",
+      "우산 및 양산",
+      "키즈 우산"
+    ],
+    "product_safety_standard": "어린이용 우산 및 양산 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "표시사항",
+      "주의/경고 표시",
+      "날카로운 가장자리/끝",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 바퀴달린 운동화": {
+    "display_product_name": "어린이용 바퀴달린 운동화",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "롤러슈즈",
+      "바퀴 운동화",
+      "바퀴달린 운동화",
+      "어린이 롤러슈즈",
+      "어린이용 바퀴달린 운동화",
+      "어린이용 바퀴달린운동화",
+      "어린이용바퀴달린운동화",
+      "힐리스"
+    ],
+    "product_safety_standard": "어린이용 바퀴 달린 운동화 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "표시사항",
+      "주의/경고 표시",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 롤러스케이트": {
+    "display_product_name": "어린이용 롤러스케이트",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "롤러스케이트",
+      "어린이 롤러스케이트",
+      "어린이용 롤러스케이트",
+      "어린이용롤러스케이트",
+      "키즈 롤러스케이트"
+    ],
+    "product_safety_standard": "어린이용 롤러스케이트 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "표시사항",
+      "주의/경고 표시",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 스키용구": {
+    "display_product_name": "어린이용 스키용구",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "스키 장비",
+      "스키용구",
+      "어린이 스키",
+      "어린이용 스키",
+      "어린이용 스키용구",
+      "어린이용스키용구"
+    ],
+    "product_safety_standard": "어린이용 스키 용구 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "카드뮴",
+      "표시사항",
+      "주의/경고 표시",
+      "날카로운 가장자리/끝",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 스노보드": {
+    "display_product_name": "어린이용 스노보드",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "스노보드",
+      "어린이 스노보드",
+      "어린이용 스노보드",
+      "어린이용스노보드",
+      "키즈 스노보드"
+    ],
+    "product_safety_standard": "어린이용 스노보드 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "표시사항",
+      "주의/경고 표시",
+      "날카로운 가장자리/끝",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "쇼핑카트 부속품": {
+    "display_product_name": "쇼핑카트 부속품",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "쇼핑카트 부속품",
+      "쇼핑카트 시트",
+      "쇼핑카트 안전벨트",
+      "쇼핑카트 유아시트",
+      "쇼핑카트부속품",
+      "카트 부속품"
+    ],
+    "product_safety_standard": "쇼핑카트 부속품 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "표시사항",
+      "주의/경고 표시",
+      "날카로운 가장자리/끝",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 장신구": {
+    "display_product_name": "어린이용 장신구",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "귀걸이",
+      "머리띠",
+      "머리핀",
+      "목걸이",
+      "반지",
+      "브로치",
+      "악세서리",
+      "액세서리",
+      "어린이 액세서리",
+      "어린이용 악세서리",
+      "어린이용 장신구",
+      "어린이용장신구",
+      "장신구",
+      "팔찌",
+      "헤어핀"
+    ],
+    "product_safety_standard": "어린이용 장신구 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "표시사항",
+      "주의/경고 표시",
+      "작은 부품",
+      "날카로운 가장자리/끝"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 킥보드": {
+    "display_product_name": "어린이용 킥보드",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "수동식 킥보드",
+      "수동식(어린이용 킥보드)",
+      "스쿠터",
+      "어린이 스쿠터",
+      "어린이 킥보드",
+      "어린이용 킥보드",
+      "어린이용킥보드",
+      "키즈 킥보드",
+      "킥보드"
+    ],
+    "product_safety_standard": "어린이용 킥보드 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "표시사항",
+      "주의/경고 표시",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 인라인 롤러스케이트": {
+    "display_product_name": "어린이용 인라인 롤러스케이트",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "어린이 인라인",
+      "어린이 인라인스케이트",
+      "어린이용 인라인 롤러스케이트",
+      "어린이용 인라인스케이트",
+      "어린이용인라인롤러스케이트",
+      "인라인 롤러스케이트",
+      "인라인스케이트",
+      "키즈 인라인"
+    ],
+    "product_safety_standard": "어린이용 인라인 롤러스케이트 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "표시사항",
+      "주의/경고 표시",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "어린이용 가구": {
+    "display_product_name": "어린이용 가구",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "가구",
+      "아동용 가구",
+      "어린이 가구",
+      "어린이 의자",
+      "어린이 책상",
+      "어린이용 가구",
+      "어린이용 의자",
+      "어린이용가구",
+      "유아용 가구",
+      "키즈 가구",
+      "키즈 의자",
+      "키즈 책상"
+    ],
+    "product_safety_standard": "어린이용 가구 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "유해원소",
+      "폼알데하이드",
+      "아릴아민/아조염료",
+      "표시사항",
+      "주의/경고 표시"
+    ],
+    "needs_user_confirmation": true
+  },
+  "아동용 섬유제품": {
+    "display_product_name": "아동용 섬유제품",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "가방류",
+      "가정용섬유제품(아동용)",
+      "모자류(아섬)",
+      "섬유제품",
+      "아동 의류",
+      "아동복",
+      "아동용 가방",
+      "아동용 섬유",
+      "아동용 섬유제품",
+      "아동용 운동화",
+      "아동용 의류",
+      "아동용섬유제품",
+      "아섬",
+      "어린이 가방",
+      "어린이 옷",
+      "어린이 책가방",
+      "외의류(아섬)",
+      "운동화(아동용 섬유제품)",
+      "중의류(아섬)",
+      "책가방",
+      "초등학생 가방",
+      "키즈 백팩",
+      "키즈 의류",
+      "학생용 가방",
+      "학생용가방"
+    ],
+    "product_safety_standard": "아동용 섬유제품 안전기준",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [
+      "프탈레이트계 가소제",
+      "납",
+      "카드뮴",
+      "폼알데하이드",
+      "아릴아민/아조염료",
+      "표시사항",
+      "끈/코드"
+    ],
+    "needs_user_confirmation": true
+  },
+  "개별 안전기준이 없는 공급자적합성확인대상어린이제품": {
+    "display_product_name": "개별 안전기준이 없는 공급자적합성확인대상어린이제품",
+    "certification_type": "공급자적합성확인",
+    "annex_no": "별표 3",
+    "aliases": [
+      "개별 안전기준이 없는 공급자적합성확인대상어린이제품",
+      "개별 안전기준이 없는 어린이제품",
+      "개별안전기준이없는공급자적합성확인대상어린이제품",
+      "기타 어린이 용품",
+      "기타 어린이제품",
+      "기타어린이제품"
+    ],
+    "product_safety_standard": "",
+    "institution_role": "지정기관 필수 아님",
+    "institution_short_names": [],
+    "hazard_keywords": [],
+    "needs_user_confirmation": true
+  }
+}
