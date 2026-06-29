@@ -62,12 +62,16 @@ async def lifespan(app: FastAPI):
         else:
             app_data["safety_json"][name_key] = []
             
-    # Load rag chunks
-    rag_file = settings.RAG_JSONL_DIR / "rag_chunk_all.jsonl"
-    if rag_file.exists():
-        app_data["rag_chunk_all"] = load_jsonl(rag_file)
+    # Load rag chunks (핸드오프 §5.2: 파일명이 rag_chunk_all_with_kc.jsonl인 경우 폴백)
+    for rag_filename in ("rag_chunk_all.jsonl", "rag_chunk_all_with_kc.jsonl"):
+        rag_file = settings.RAG_JSONL_DIR / rag_filename
+        if rag_file.exists():
+            app_data["rag_chunk_all"] = load_jsonl(rag_file)
+            logger.info(f"Loaded rag_jsonl/{rag_filename} ({len(app_data['rag_chunk_all'])}건)")
+            break
     else:
         app_data["rag_chunk_all"] = []
+        logger.warning("rag_chunk_all*.jsonl 파일 없음 (skipped)")
         
     yield
     # Cleanup on shutdown

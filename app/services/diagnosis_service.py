@@ -14,6 +14,7 @@ from app.services.report_service import generate_markdown_report
 from app.services.category_matcher import match_category
 from app.services.certification_service import diagnose_certification
 from app.services.institution_service import get_institution_guidance
+from app.services.recall_service import get_recall_summary
 
 logger = logging.getLogger(__name__)
 
@@ -62,13 +63,21 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
         )
         inst_source_refs = []
     
-    empty_recall_summary = RecallReasonSummary(
-        recall_count=0,
-        top_recall_reasons=[],
-        representative_cases=[],
-        prevention_points=[]
-    )
-    
+    # Phase 5: 국내 리콜 사유 검색
+    try:
+        recall_summary, recall_source_refs = get_recall_summary(
+            legal_product_candidates, cert_diagnosis, app_data
+        )
+    except Exception as e:
+        logger.warning(f"recall summary failed: {e}")
+        recall_summary = RecallReasonSummary(
+            recall_count=0,
+            top_recall_reasons=[],
+            representative_cases=[],
+            prevention_points=[],
+        )
+        recall_source_refs = []
+
     empty_kc_summary = KcCertificationSummary(
         similar_cert_count=0,
         top_cert_organ_names=[],
@@ -84,12 +93,12 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
         legal_product_candidates=legal_product_candidates,
         certification_diagnosis=cert_diagnosis,
         institution_guidance=inst_guidance,
-        recall_reason_summary=empty_recall_summary,
+        recall_reason_summary=recall_summary,
         kc_certification_summary=empty_kc_summary,
         launch_checklist=launch_checklist,
         final_report_markdown="",
         used_rag_chunk_ids=[],
-        source_refs=list(dict.fromkeys(cert_source_refs + inst_source_refs)),
+        source_refs=list(dict.fromkeys(cert_source_refs + inst_source_refs + recall_source_refs)),
         model_name="Baseline (Template-only)",
         disclaimer="본 결과는 입력된 데이터를 바탕으로 한 예비 진단 결과이며, 최종 법적 판단 기준이 될 수 없습니다."
     )
