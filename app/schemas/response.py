@@ -16,10 +16,19 @@ class CertificationDiagnosis(BaseModel):
     judgement_level: str
     source_refs: List[str]
 
+class InstitutionInfo(BaseModel):
+    institution_name: str
+    short_name: str = ""
+    institution_role: str = ""
+    certification_type: str = ""
+    website_url: str = ""
+    product_scope: List[str] = []
+    source_refs: List[str] = []
+
 class InstitutionGuidance(BaseModel):
     institution_required: bool
     summary: str
-    candidate_institutions: List[str]
+    candidate_institutions: List[InstitutionInfo]
 
 class RecallReasonSummary(BaseModel):
     recall_count: int

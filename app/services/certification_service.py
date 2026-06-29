@@ -130,6 +130,25 @@ def diagnose_certification(
             [],
         )
 
+    # 과확정 방지: 최우선 후보가 NEEDS_CONFIRMATION 수준이면 (CONFIRMED/CANDIDATE가 하나도 없음)
+    # 특정 품목으로 인증유형·안전기준·체크리스트를 확정하지 않는다.
+    # 후보 자체는 응답에 남아 사용자가 확인할 수 있다.
+    if _safe_str(top.confidence_level) == "NEEDS_CONFIRMATION":
+        logger.info(
+            "Phase 3 과확정 방지: 최우선 후보 '%s'가 NEEDS_CONFIRMATION → 확인 전 반환",
+            _safe_str(top.legal_product_name),
+        )
+        return (
+            CertificationDiagnosis(
+                certification_type="확인 전",
+                applied_standards=[],
+                judgement_level="NEEDS_CONFIRMATION",
+                source_refs=[],
+            ),
+            [],
+            [],
+        )
+
     legal_name = _safe_str(top.legal_product_name)
     # product_category_index에서 이미 가져온 certification_type이 있으면 fallback으로 사용
     cert_type: str = _safe_str(top.certification_type)

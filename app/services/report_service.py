@@ -69,11 +69,18 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
     # ── 4. 기관 및 절차 안내 ──────────────────────────────────────────────
     md += "## 4. 기관 및 절차 안내\n\n"
     inst = response.institution_guidance
+    required_label = "필요" if inst.institution_required else "불필요 (공급자 자체 확인)"
+    md += f"- **지정기관 필요 여부**: {required_label}\n"
     md += f"- {inst.summary}\n"
     if inst.candidate_institutions:
-        md += "\n**후보 기관**\n\n"
+        md += "\n**후보 기관 목록**\n\n"
         for org in inst.candidate_institutions:
-            md += f"- {org}\n"
+            name_str = f"{org.institution_name}"
+            if org.short_name:
+                name_str += f" ({org.short_name})"
+            role_str = f" — {org.institution_role}" if org.institution_role else ""
+            url_str = f" / {org.website_url}" if org.website_url else ""
+            md += f"- **{name_str}**{role_str}{url_str}\n"
     md += "\n"
 
     # ── 5. 국내 리콜 사유 요약 ────────────────────────────────────────────
