@@ -26,9 +26,26 @@ _SEARCHABLE_FIELDS: Tuple[Tuple[str, float], ...] = (
 _FILLER_TOKENS = frozenset({
     "정확한", "정체불명", "모르겠습니다", "모르겠어요", "합니다", "하려고",
     "출시", "출시하려고", "사용", "사용하는", "사용하려고", "수입", "수입하려고",
-    "제조", "제조하려고", "있습니다", "입니다", "관련", "대해", "위한", "위해",
-    "그리고", "이며", "또는", "제품을", "품목을", "품목", "물건", "물건을",
+    "제조", "제조하려고", "제조해서", "판매", "판매하려고", "있습니다", "입니다",
+    "관련", "대해", "위한", "위해", "그리고", "이며", "또는",
+    "제품을", "품목을", "품목", "물건", "물건을", "입는", "소재", "쓰는",
 })
+
+# 소재/공정 단어 — 품목 식별력이 낮으므로 핵심 토큰이 아니라 보조(low) 신호로만 사용.
+# (예: "봉제" 때문에 완구/학용품이 유아용 내의 후보로 뜨는 현상 방지)
+_MATERIAL_PROCESS_TOKENS = frozenset({
+    "봉제", "면", "원단", "고무", "밴드", "플라스틱", "합성수지", "목재",
+    "금속", "종이", "안료", "코팅", "도장", "페인트",
+})
+
+# 일반 연령/대상 수식어 접두사 — 이것으로 시작하는 토큰은 보조(low) 신호로 처리.
+# "어린이가/어린이는/어린이를"(조사형)과 "어린이용/아동용/유아용"(수식어)을 함께 커버한다.
+# 품목 구분은 수식어가 아니라 핵심 명사(내의, 책가방 등)가 담당해야 한다.
+_GENERIC_MODIFIER_PREFIXES = ("어린이", "아동", "유아", "아기", "영아", "신생아", "아이")
+
+# 연령대 신호 단어
+_INFANT_WORDS = ("아기", "영아", "유아", "신생아")
+_AGE_NUM_RE = re.compile(r"(\d+)\s*세")
 
 _TOKEN_SPLIT_RE = re.compile(r"[\s,/;:|()\[\]{}<>\"'`~!?.\-_+=]+")
 _MIN_TOKEN_LEN = 2
@@ -40,6 +57,9 @@ _MAX_CANDIDATES = 5
 _LOW_SIGNAL_DF_RATIO = 0.25
 _LOW_SIGNAL_MULT = 0.15
 _SUBSTRING_BONUS = 8.0
+# 연령 보정 보너스: target_age/user_query의 연령 표현이 후보의 연령대와 맞으면 가산.
+# 이미 high-signal로 매칭된 후보의 순위/confidence 조정에만 사용한다.
+_AGE_BONUS = 2.5
 
 # 핸드오프 §6 Phase 2 기준
 _CONFIRMED_THRESHOLD = 0.7
@@ -100,15 +120,48 @@ def _token_signal(token: str, product_texts: List[str], low_signal_df: float) ->
 
     document frequency를 substring 기준으로 계산한다 — scoring(`tok in field_text`)과
     동일한 기준이라, '내의'처럼 '내의류(...)' 복합어로만 존재하는 토큰도 일관되게 처리된다.
+    소재/공정 단어와 연령/대상 수식어(조사형 포함)는 데이터 빈도와 무관하게 보조 신호로 둔다.
     """
     if token in _FILLER_TOKENS:
         return 0.0
+    # 소재/공정 단어 → 보조 신호 (품목 식별의 핵심 토큰으로 쓰지 않음)
+    if token in _MATERIAL_PROCESS_TOKENS:
+        return _LOW_SIGNAL_MULT
+    # 연령/대상 수식어 또는 조사형 일반어(어린이가/어린이를 등) → 보조 신호
+    if any(token.startswith(p) for p in _GENERIC_MODIFIER_PREFIXES):
+        return _LOW_SIGNAL_MULT
     d = sum(1 for txt in product_texts if token in txt)
     if d == 0:
         return 0.0  # 데이터에 없는 토큰 (어차피 매칭되지 않음)
     if d >= low_signal_df:
         return _LOW_SIGNAL_MULT
     return 1.0
+
+
+def _detect_age_band(request: DiagnosisRequest) -> str | None:
+    """target_age + user_query에서 연령대 신호 추출.
+
+    Returns: "INFANT" | "CHILD" | None
+    - 데이터에 없는 품목명을 만들지 않으며, 후보 순위/confidence 보정에만 쓰인다.
+    """
+    target_age = _safe_str(getattr(request, "target_age", ""))
+    user_query = _safe_str(getattr(request, "user_query", ""))
+    text = f"{target_age} {user_query}".lower()
+    if not text.strip():
+        return None
+    # 영유아: 개월 단위 또는 아기/영아/유아/신생아 표현
+    if "개월" in text or any(w in text for w in _INFANT_WORDS):
+        return "INFANT"
+    # 아동: N세(3세 이상) 또는 초등/아동 표현
+    for m in _AGE_NUM_RE.findall(text):
+        try:
+            if int(m) >= 3:
+                return "CHILD"
+        except ValueError:
+            continue
+    if "초등" in text or "아동" in text:
+        return "CHILD"
+    return None
 
 
 def _score_entry(
@@ -238,6 +291,9 @@ def match_category(
         _token_signal(t, product_texts, low_signal_df) >= 1.0 for t in deduped_tokens
     )
 
+    # 연령대 신호 (INFANT / CHILD / None) — 후보 순위·confidence 보정용
+    age_band = _detect_age_band(request)
+
     # legal_product_name 기준 dedup: 품목별 최고 점수 항목만 유지
     best_per_product: Dict[str, Tuple[float, List[str], List[str], Dict[str, Any]]] = {}
     for item in index_data:
@@ -251,6 +307,15 @@ def match_category(
         legal_name = _safe_str(item.get("legal_product_name"))
         if not legal_name:
             continue
+
+        # 연령 보정: 이미 high-signal로 매칭된 후보에만 적용 (재순위/confidence 조정)
+        # 데이터에 존재하는 "유아용"/"아동용" 품목명에만 가산하므로 새 품목을 만들지 않음
+        if matched_hi:
+            if age_band == "INFANT" and "유아" in legal_name:
+                raw_score += _AGE_BONUS
+            elif age_band == "CHILD" and "아동" in legal_name:
+                raw_score += _AGE_BONUS
+
         existing = best_per_product.get(legal_name)
         if existing is None or raw_score > existing[0]:
             best_per_product[legal_name] = (raw_score, matched_hi, matched_lo, item)
@@ -269,6 +334,11 @@ def match_category(
 
     candidates: List[LegalProductCandidate] = []
     for raw_score, matched_hi, matched_lo, item in ranked[:_MAX_CANDIDATES]:
+        legal_name_for_age = _safe_str(item.get("legal_product_name"))
+        age_adjusted = bool(matched_hi) and (
+            (age_band == "INFANT" and "유아" in legal_name_for_age)
+            or (age_band == "CHILD" and "아동" in legal_name_for_age)
+        )
         norm_score = max(0.0, min(1.0, raw_score / norm_base))
 
         # high-signal 토큰이 전혀 없는 입력이면 모든 후보를 확인 요청 수준으로 강등
@@ -286,6 +356,9 @@ def match_category(
             basis_bits.append(f"핵심 매칭 토큰: {', '.join(matched_hi)}")
         if matched_lo:
             basis_bits.append(f"보조 토큰: {', '.join(matched_lo)}")
+        if age_adjusted:
+            band_label = "영유아" if age_band == "INFANT" else "아동"
+            basis_bits.append(f"연령대({band_label}) 보정 적용")
         if multi_near_tie:
             basis_bits.append("유사 점수 후보 다수 → 사용자 확인 필요")
         match_basis = " / ".join(basis_bits) if basis_bits else "매칭 근거 없음"
