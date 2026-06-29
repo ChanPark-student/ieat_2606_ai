@@ -123,11 +123,30 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
     # ── 6. KC 유사 인증사례 참고 ──────────────────────────────────────────
     md += "## 6. KC 유사 인증사례 참고\n\n"
     kc = response.kc_certification_summary
-    md += f"- 유사 인증사례 건수: **{kc.similar_cert_count}건**\n"
+
+    top_cand_for_kc = next(
+        (c for c in response.legal_product_candidates
+         if c.confidence_level in ("CONFIRMED", "CANDIDATE")),
+        None,
+    )
+    if kc.similar_cert_count > 0 and top_cand_for_kc:
+        md += (
+            f"- **「{top_cand_for_kc.legal_product_name}」 계열 유사 KC 인증사례**: "
+            f"**{kc.similar_cert_count:,}건**\n"
+        )
+    else:
+        md += f"- 유사 KC 인증사례 건수: **{kc.similar_cert_count}건**\n"
+
     if kc.top_cert_organ_names:
-        md += f"- 주요 인증기관: {', '.join(kc.top_cert_organ_names)}\n"
+        md += "\n**주요 인증기관**\n\n"
+        for organ in kc.top_cert_organ_names:
+            md += f"- {organ}\n"
+
     if kc.representative_models:
-        md += f"- 대표 모델: {', '.join(kc.representative_models)}\n"
+        md += "\n**대표 인증 사례**\n\n"
+        for model in kc.representative_models:
+            md += f"- {model}\n"
+
     md += f"\n> {kc.note}\n\n"
 
     # ── 7. 출시 전 확인 체크리스트 ───────────────────────────────────────

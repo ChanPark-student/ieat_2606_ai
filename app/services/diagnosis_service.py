@@ -15,6 +15,7 @@ from app.services.category_matcher import match_category
 from app.services.certification_service import diagnose_certification
 from app.services.institution_service import get_institution_guidance
 from app.services.recall_service import get_recall_summary
+from app.services.kc_certification_service import get_kc_summary
 
 logger = logging.getLogger(__name__)
 
@@ -78,12 +79,20 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
         )
         recall_source_refs = []
 
-    empty_kc_summary = KcCertificationSummary(
-        similar_cert_count=0,
-        top_cert_organ_names=[],
-        representative_models=[],
-        note="유사 KC 인증 정보가 없습니다."
-    )
+    # Phase 6: KC 유사 인증사례 요약
+    try:
+        kc_summary, kc_source_refs = get_kc_summary(
+            legal_product_candidates, cert_diagnosis, app_data
+        )
+    except Exception as e:
+        logger.warning(f"kc summary failed: {e}")
+        kc_summary = KcCertificationSummary(
+            similar_cert_count=0,
+            top_cert_organ_names=[],
+            representative_models=[],
+            note="유사 KC 인증사례 정보를 확인하지 못했습니다. 관계 기관 확인이 필요합니다.",
+        )
+        kc_source_refs = []
     
     # Build initial response without markdown
     response = DiagnosisResponse(
@@ -94,11 +103,11 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
         certification_diagnosis=cert_diagnosis,
         institution_guidance=inst_guidance,
         recall_reason_summary=recall_summary,
-        kc_certification_summary=empty_kc_summary,
+        kc_certification_summary=kc_summary,
         launch_checklist=launch_checklist,
         final_report_markdown="",
         used_rag_chunk_ids=[],
-        source_refs=list(dict.fromkeys(cert_source_refs + inst_source_refs + recall_source_refs)),
+        source_refs=list(dict.fromkeys(cert_source_refs + inst_source_refs + recall_source_refs + kc_source_refs)),
         model_name="Baseline (Template-only)",
         disclaimer="본 결과는 입력된 데이터를 바탕으로 한 예비 진단 결과이며, 최종 법적 판단 기준이 될 수 없습니다."
     )
