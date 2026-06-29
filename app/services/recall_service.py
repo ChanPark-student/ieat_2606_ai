@@ -81,29 +81,71 @@ def _aggregate_reason_keywords(
     return [kw for kw, _ in counter.most_common(_MAX_TOP_REASONS)]
 
 
+def _description_score(record: Dict[str, Any]) -> int:
+    """설명 필드의 충실도 점수 (높을수록 우선 선택)."""
+    score = 0
+    if (record.get("harmDscr") or "").strip():
+        score += 4
+    if (record.get("accidentCaseDscr") or "").strip():
+        score += 2
+    if (record.get("publishActionDscr") or "").strip():
+        score += 1
+    return score
+
+
 def _build_representative_cases(
     records: List[Dict[str, Any]],
-) -> List[str]:
+) -> Tuple[List[str], List[Any]]:
     """대표 리콜 사례를 한 줄 문자열로 구성.
 
-    형식: "{recallProductName} ({publishDate}): {harmDscr 요약}"
+    - 설명 필드(harmDscr 우선)가 있는 사례를 먼저 선택
+    - recallProductName 기준 dedup: 같은 제품명 중 설명이 가장 풍부한 레코드 선택
+    - 모든 설명 필드가 비어 있으면 "상세 사유 없음" 명시
+
+    Returns:
+        (cases: List[str], uids: List[Any])  — source_refs용 uid 목록 함께 반환
     """
-    cases: List[str] = []
-    seen: set[str] = set()
-    for r in records[:_MAX_CASES * 3]:  # 중복 제거를 위해 여유분 순회
+    # recallProductName 기준 dedup: 가장 description_score가 높은 레코드 유지
+    best_by_name: Dict[str, Dict[str, Any]] = {}
+    for r in records:
         product = _safe_str(r.get("recallProductName"))
-        if not product or product in seen:
+        if not product:
             continue
-        seen.add(product)
-        date = _safe_str(r.get("publishDate"))[:8] if r.get("publishDate") else ""
-        harm = _safe_str(r.get("harmDscr")).replace("\n", " ").strip()
-        harm_short = harm[:80] + "…" if len(harm) > 80 else harm
+        existing = best_by_name.get(product)
+        if existing is None or _description_score(r) > _description_score(existing):
+            best_by_name[product] = r
+
+    # 설명 충실도 내림차순 정렬
+    ranked = sorted(best_by_name.values(), key=_description_score, reverse=True)
+
+    cases: List[str] = []
+    uids: List[Any] = []
+
+    for r in ranked:
+        product = _safe_str(r.get("recallProductName"))
+        date = str(r.get("publishDate", ""))[:8] if r.get("publishDate") else ""
         date_str = f" ({date})" if date else ""
-        line = f"{product}{date_str}: {harm_short}" if harm_short else product
+
+        harm = (r.get("harmDscr") or "").replace("\n", " ").strip()
+        if not harm:
+            harm = (r.get("accidentCaseDscr") or "").replace("\n", " ").strip()
+        if not harm:
+            harm = (r.get("publishActionDscr") or "").replace("\n", " ").strip()
+
+        if harm:
+            harm_short = harm[:80] + "…" if len(harm) > 80 else harm
+            line = f"{product}{date_str}: {harm_short}"
+        else:
+            line = f"{product}{date_str}: 상세 사유 없음"
+
         cases.append(line)
+        uid = r.get("recallUid")
+        if uid:
+            uids.append(uid)
         if len(cases) >= _MAX_CASES:
             break
-    return cases
+
+    return cases, uids
 
 
 def _build_prevention_points(
@@ -223,7 +265,7 @@ def get_recall_summary(
     top_reasons = _aggregate_reason_keywords(matched)
 
     # ── 대표 사례 구성 ────────────────────────────────────────────────────
-    rep_cases = _build_representative_cases(matched)
+    rep_cases, rep_uids = _build_representative_cases(matched)
 
     # ── 예방 확인사항 (safety_standard_check_items 기반) ──────────────────
     # 첫 번째 타겟 품목(가장 신뢰도 높은 후보) 기준
@@ -234,12 +276,10 @@ def get_recall_summary(
     except Exception as e:
         logger.warning("Phase 5 prevention_points 생성 실패: %s", e)
 
-    # ── source_refs ───────────────────────────────────────────────────────
+    # ── source_refs: 대표 사례로 표시된 uid를 모두 포함 ──────────────────
     source_refs: List[str] = [f"domestic_recall:{primary_name}:{len(matched)}건"]
-    for r in matched[:3]:
-        uid = r.get("recallUid")
-        if uid:
-            source_refs.append(f"domestic_recall:uid={uid}")
+    for uid in rep_uids:
+        source_refs.append(f"domestic_recall:uid={uid}")
     source_refs = source_refs[:_MAX_SOURCE_REFS]
 
     return (

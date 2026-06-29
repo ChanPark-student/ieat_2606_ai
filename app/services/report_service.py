@@ -86,15 +86,36 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
     # ── 5. 국내 리콜 사유 요약 ────────────────────────────────────────────
     md += "## 5. 국내 리콜 사유 요약\n\n"
     recall = response.recall_reason_summary
-    md += f"- 유사 국내 리콜 사례 건수: **{recall.recall_count}건**\n"
+
+    # 법정 품목군 이름을 헤더에 표시 (CONFIRMED/CANDIDATE 후보가 있을 때)
+    top_cand = next(
+        (c for c in response.legal_product_candidates
+         if c.confidence_level in ("CONFIRMED", "CANDIDATE")),
+        None,
+    )
+    if recall.recall_count > 0 and top_cand:
+        md += (
+            f"- **「{top_cand.legal_product_name}」 계열 동일 법정 품목군 기준 "
+            f"유사 리콜 사례**: **{recall.recall_count}건**\n"
+        )
+    else:
+        md += f"- 유사 국내 리콜 사례 건수: **{recall.recall_count}건**\n"
+
     if recall.top_recall_reasons:
         md += "\n**주요 리콜 사유**\n\n"
         for reason in recall.top_recall_reasons:
             md += f"- {reason}\n"
+
     if recall.representative_cases:
         md += "\n**대표 리콜 사례**\n\n"
         for case in recall.representative_cases:
             md += f"- {case}\n"
+
+    if recall.prevention_points:
+        md += "\n**리콜 사유 기반 예방 포인트** *(리콜 데이터 기반, 출시 전 우선 확인)*\n\n"
+        for pt in recall.prevention_points:
+            md += f"- [ ] {pt}\n"
+
     if not recall.top_recall_reasons and not recall.representative_cases:
         md += "\n유사 리콜 사례 정보가 없습니다.\n"
     md += "\n"
