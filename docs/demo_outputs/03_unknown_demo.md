@@ -59,7 +59,11 @@
 
   (확인 필요 — 법정 품목명 미확정으로 체크리스트 생성 불가)
 
-## 8. final_report_markdown 원문
+## 8. 검색 근거 요약 (RAG / source_refs)
+
+  - used_rag_chunk_ids: (없음 — 품목 미확정 시 근거 chunk 미수집)
+
+## 9. final_report_markdown 원문
 
 ```markdown
 # 신제품 출시 전 인증 및 리콜 리스크 사전 검토 결과

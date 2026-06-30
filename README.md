@@ -15,6 +15,7 @@
 | 스키마 검증 | Pydantic v2 + pydantic-settings |
 | 환경변수 | python-dotenv |
 | 데이터 처리 | JSON / JSONL 파일 기반 Rule / Keyword 검색 |
+| 검색 | 경량 BM25 (`rank-bm25`) — 국내 리콜 대표 사례 정렬 + RAG 근거 chunk 검색 |
 | 보고서 생성 | Markdown 템플릿 기반 (LLM 연동 선택적 활성화 — `ENABLE_LLM=true`) |
 
 ---
@@ -176,12 +177,17 @@ http://127.0.0.1:8000/health 접속 후 아래 응답이 오면 정상입니다.
     "master_json": true,
     "safety_json": true,
     "rag_chunk_all": true,
+    "recall_bm25": true,
+    "rag_retriever": true,
+    "rag_chunk_count": 385,
+    "kc_index": true,
     "llm": false
   }
 }
 ```
 
-`master_json`이 `false`이면 `data/master_json/` 파일을 확인하세요.
+- `master_json`이 `false`이면 `data/master_json/` 파일을 확인하세요.
+- `rag_retriever`가 `false`이면 `data/rag_jsonl/rag_chunk_all*.jsonl`이 없거나 `rank-bm25`가 설치되지 않은 것입니다. 이 경우에도 서버는 정상 동작하며, 근거 chunk 검색(`used_rag_chunk_ids`)만 비활성화됩니다.
 
 ### 방법 2 — Swagger에서 /diagnose 테스트
 
@@ -297,6 +303,26 @@ data/safety_json/kc_certification.json
 
 ---
 
+## RAG Retriever (근거 chunk 검색)
+
+`data/rag_jsonl/rag_chunk_all*.jsonl` 기반의 **경량 검색기**입니다.
+
+- **방식**: `rank-bm25` 기반 BM25 + Rule 결과 가중(boost)·문서유형 quota. 임베딩/벡터 DB는 현재 MVP에서 사용하지 않습니다(설치 부담·재현성 고려).
+- **역할**: Retriever는 **법적 판단 엔진이 아니라 근거 chunk 검색기**입니다. 법정 품목명·인증유형·KC 매칭·리콜 count 등 Rule 판단 결과를 바꾸지 않으며, LLM/보고서에 넣을 "근거 chunk"를 찾고 `used_rag_chunk_ids`·`source_refs`를 채우는 데만 사용됩니다.
+- **품목 확정 시**: 해당 품목(완구 등)의 인증기준·안전기준·체크리스트·시험기관·KC 요약 chunk를 균형 있게 검색합니다.
+- **불확실 입력**(법정 품목명 미확정 / 인증유형 `확인 전`): 품목 특정 근거를 과확정처럼 가져오지 않으며 `used_rag_chunk_ids`가 비어 있을 수 있습니다.
+- **Fallback**: `rag_chunk_all*.jsonl`이 없거나 `rank-bm25` 미설치 시 retriever만 비활성화되고 서버·진단은 정상 동작합니다. 깨진 JSONL 라인은 건너뜁니다.
+- 사용자 보고서 본문에는 BM25·retriever score 등 기술 용어나 내부 chunk ID를 노출하지 않습니다.
+
+### 재현/점검 스크립트
+
+```bash
+python scripts/run_smoke_tests.py        # A~E 케이스 핵심 불변식 검증 (종료코드 0=통과)
+python scripts/generate_demo_outputs.py  # docs/demo_outputs/*.md 재생성
+```
+
+---
+
 ## 현재 구현 상태
 
 | 기능 | 상태 |
@@ -305,9 +331,10 @@ data/safety_json/kc_certification.json
 | 법정 품목명 후보 매칭 (신뢰도 3단계) | ✅ 완료 |
 | 인증유형 및 안전기준 조회 | ✅ 완료 |
 | 시험기관 및 절차 안내 | ✅ 완료 |
-| 국내 리콜 사유 요약 및 예방 포인트 | ✅ 완료 |
+| 국내 리콜 사유 요약 및 예방 포인트 (BM25 정렬) | ✅ 완료 |
 | KC 유사 인증사례 검색 | ✅ 완료 |
 | 출시 전 체크리스트 생성 | ✅ 완료 |
+| RAG 근거 chunk 검색 (경량 BM25) | ✅ 완료 |
 | Markdown 보고서 생성 (템플릿 기반) | ✅ 완료 |
 | LLM 연동 보고서 생성 (선택) | ✅ 완료 (`ENABLE_LLM=true` 설정 시 활성화) |
 
