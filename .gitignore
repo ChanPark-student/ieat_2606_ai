@@ -34,3 +34,11 @@ data/safety_json/kc_certification.json
 
 # Log files
 *.log
+
+# Temporary analysis / scratch files
+scratch_*.txt
+scratch_*.json
+scratch_*.py
+
+# Windows empty folder artifacts
+새 폴더/
