@@ -20,37 +20,28 @@ _NOTE_NO_DATA = (
     "유사 KC 인증사례 정보가 없습니다. "
     "관계 기관 또는 SafetyKorea에서 직접 확인해주세요."
 )
+_NOTE_SELF_CONFORMITY = (
+    "해당 품목은 공급자적합성확인 대상이므로 KC 인증정보 데이터에서 동일 품목 유사 인증사례가 "
+    "제한적으로 확인될 수 있습니다. 시험성적서 및 적합성 입증자료 확보가 필요합니다."
+)
 
 _LEVEL_PRIORITY = {"CONFIRMED": 0, "CANDIDATE": 1, "NEEDS_CONFIRMATION": 2}
-
-# 법정 품목명 정규화 시 제거할 접두사 (길이 내림차순 — 긴 것부터 시도)
-_STRIP_PREFIXES = (
-    "어린이용 ", "유아용 ", "아동용 ", "어린이 ", "유아 ", "아동 ",
-)
 
 
 def _safe_str(val: Any) -> str:
     return str(val).strip() if val is not None else ""
 
 
-def _normalize_name(name: str) -> str:
-    """법정 품목명 정규화: 앞 접두사 제거 + 괄호 내 공백 통일."""
-    n = name.strip()
-    for prefix in _STRIP_PREFIXES:
-        if n.startswith(prefix):
-            n = n[len(prefix):]
-            break
-    # 괄호 내 공백 정규화 "(보호 장구" → "(보호장구" 방향으로 비교할 때 사용
-    return n
-
-
 def _find_kc_match(legal_name: str, kc_agg: Dict[str, Any]) -> Optional[str]:
-    """법정 품목명을 KC 집계 인덱스 키에 3단계 매칭.
+    """법정 품목명을 KC 집계 인덱스 키에 2단계 매칭.
 
     1. 정확 일치
-    2. substring 포함 관계 (A in B, B in A)
-    3. 정규화 후 정확 일치 또는 substring
-    반환: 매칭된 KC 카테고리 키, 없으면 None
+    2. substring 포함 관계 (A in B 또는 B in A)
+
+    접두사 제거 정규화(3단계)는 의도적으로 제외한다.
+    "아동용 섬유제품"과 "유아용 섬유제품"처럼 법정 품목군이 다른 항목이
+    접두사 제거 후 "섬유제품"으로 동일시되어 잘못 매칭되는 문제를 방지하기 위함.
+    KC 데이터에 정확한 카테고리가 없으면 None을 반환한다.
     """
     if not legal_name or not kc_agg:
         return None
@@ -59,18 +50,11 @@ def _find_kc_match(legal_name: str, kc_agg: Dict[str, Any]) -> Optional[str]:
     if legal_name in kc_agg:
         return legal_name
 
-    # 2. substring 포함
+    # 2. substring 포함 — 한쪽이 다른 쪽에 완전히 포함될 때만 허용
+    #    예: KC "물안경" ⊂ 법정 "어린이용 물안경" → 매칭 O
+    #    반례: "아동용 섬유제품" vs "유아용 섬유제품" → 둘 다 방향 불성립 → 매칭 X
     for key in kc_agg:
         if key in legal_name or legal_name in key:
-            return key
-
-    # 3. 정규화 후 비교
-    norm_legal = _normalize_name(legal_name)
-    for key in kc_agg:
-        norm_key = _normalize_name(key)
-        if norm_legal == norm_key:
-            return key
-        if norm_legal and norm_key and (norm_legal in norm_key or norm_key in norm_legal):
             return key
 
     return None
@@ -169,6 +153,15 @@ def get_kc_summary(
 
     if matched_kc_key is None:
         logger.info("Phase 6: '%s' 관련 KC 카테고리 없음", ", ".join(target_names))
+        # 공급자적합성확인 대상은 KC 인증 데이터에 해당 카테고리가 없는 것이 제도적으로 자연스러움
+        cert_type = (cert_diagnosis.certification_type or "").strip()
+        if cert_type == "공급자적합성확인":
+            return KcCertificationSummary(
+                similar_cert_count=0,
+                top_cert_organ_names=[],
+                representative_models=[],
+                note=_NOTE_SELF_CONFORMITY,
+            ), []
         return empty, []
 
     entry = kc_agg[matched_kc_key]
