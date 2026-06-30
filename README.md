@@ -64,9 +64,16 @@ ieat_2606_ai/
 ### 1. 저장소 Clone
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/ChanPark-student/ieat_2606_ai.git
 cd ieat_2606_ai
 ```
+
+> **브랜치 안내**: 현재 최신 기능(Phase 2~6)은 `feat/domestic-recall-summary` 브랜치에 있습니다.  
+> `main` 브랜치는 초기 베이스라인 상태입니다. 최신 코드를 사용하려면 아래 명령어로 브랜치를 전환하세요.
+>
+> ```bash
+> git checkout feat/domestic-recall-summary
+> ```
 
 ### 2. 가상환경 생성 및 활성화
 
