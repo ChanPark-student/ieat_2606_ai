@@ -15,7 +15,7 @@
   "material_text": "플라스틱, 금속 나사",
   "power_type": "건전지",
   "battery_included": true,
-  "import_or_domestic": "수입"
+  "import_or_manufacture": "수입"
 }
 ```
 
@@ -116,6 +116,7 @@
 - **소재**: 플라스틱, 금속 나사
 - **전원**: 건전지
 - **배터리 포함**: 예
+- **수입/제조**: 수입
 
 ## 2. 법정 품목명 후보
 

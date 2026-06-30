@@ -15,7 +15,7 @@
   "material_text": "폴리에스터, 나일론",
   "power_type": null,
   "battery_included": false,
-  "import_or_domestic": "수입"
+  "import_or_manufacture": "수입"
 }
 ```
 
@@ -88,6 +88,7 @@
 - **문의 내용**: 초등학생용 책가방을 수입합니다.
 - **대상 연령**: 7세
 - **소재**: 폴리에스터, 나일론
+- **수입/제조**: 수입
 
 ## 2. 법정 품목명 후보
 

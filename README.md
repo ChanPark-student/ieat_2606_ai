@@ -15,7 +15,7 @@
 | 스키마 검증 | Pydantic v2 + pydantic-settings |
 | 환경변수 | python-dotenv |
 | 데이터 처리 | JSON / JSONL 파일 기반 Rule / Keyword 검색 |
-| 보고서 생성 | Markdown 템플릿 기반 (LLM 연동 미구현) |
+| 보고서 생성 | Markdown 템플릿 기반 (LLM 연동 선택적 활성화 — `ENABLE_LLM=true`) |
 
 ---
 

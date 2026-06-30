@@ -15,7 +15,7 @@
   "material_text": null,
   "power_type": null,
   "battery_included": false,
-  "import_or_domestic": "수입"
+  "import_or_manufacture": "수입"
 }
 ```
 
@@ -87,6 +87,7 @@
 - **제품명**: 정체불명 어린이용 반짝이 물건
 - **문의 내용**: 어린이용 반짝이 물건인데 정확한 품목을 모르겠습니다.
 - **대상 연령**: 7세
+- **수입/제조**: 수입
 
 ## 2. 법정 품목명 후보
 
