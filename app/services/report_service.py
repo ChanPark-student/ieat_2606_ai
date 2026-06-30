@@ -96,14 +96,10 @@ def _prioritize_checklist(
 
     def _score(item: str) -> int:
         item_l = item.lower()
-        score = 0
-        for kw in priority_kw:
-            if kw in item_l:
-                score += 10
-        for kw in depriority_kw:
-            if kw in item_l:
-                score -= 5
-        return score
+        p_score = sum(10 for kw in priority_kw if kw in item_l)
+        if p_score > 0:
+            return p_score  # priority 신호 있으면 depriority 패널티 무시
+        return sum(-5 for kw in depriority_kw if kw in item_l)
 
     return sorted(items, key=lambda x: -_score(x))
 

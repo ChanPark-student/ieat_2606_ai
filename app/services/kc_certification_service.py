@@ -63,14 +63,20 @@ def _find_kc_match(legal_name: str, kc_agg: Dict[str, Any]) -> Optional[str]:
 def _pick_target_names(candidates: List[LegalProductCandidate]) -> List[str]:
     """검색 대상 법정 품목명 목록.
 
-    CONFIRMED·CANDIDATE → 해당 품목들.
-    NEEDS_CONFIRMATION만 → 최고점 1개 (과도한 union 방지).
+    각 신뢰도 레벨에서 최고점 1개만 반환.
+    → 아동용/유아용 섬유제품처럼 유사 품목명 간 KC 데이터 교차 매칭 방지.
+    CONFIRMED 존재 → 최고점 CONFIRMED 1개.
+    CONFIRMED 없고 CANDIDATE 존재 → 최고점 CANDIDATE 1개.
+    둘 다 없음 → 최고점 NEEDS_CONFIRMATION 1개.
     """
     if not candidates:
         return []
-    valid = [c for c in candidates if c.confidence_level in ("CONFIRMED", "CANDIDATE")]
-    if valid:
-        return list(dict.fromkeys(_safe_str(c.legal_product_name) for c in valid if c.legal_product_name))
+    for level in ("CONFIRMED", "CANDIDATE"):
+        group = [c for c in candidates if c.confidence_level == level]
+        if group:
+            top = max(group, key=lambda c: c.confidence_score)
+            name = _safe_str(top.legal_product_name)
+            return [name] if name else []
     top = max(candidates, key=lambda c: c.confidence_score)
     name = _safe_str(top.legal_product_name)
     return [name] if name else []
