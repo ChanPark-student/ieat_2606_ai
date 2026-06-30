@@ -16,6 +16,8 @@ from app.services.certification_service import diagnose_certification
 from app.services.institution_service import get_institution_guidance
 from app.services.recall_service import get_recall_summary
 from app.services.kc_certification_service import get_kc_summary
+from app.search.rag_retriever import collect_refs
+from app.search.text_utils import tokenize, meaningful_tokens
 
 logger = logging.getLogger(__name__)
 
@@ -107,7 +109,70 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
             note="유사 KC 인증사례 정보를 확인하지 못했습니다. 관계 기관 확인이 필요합니다.",
         )
         kc_source_refs = []
-    
+
+    # Phase 6.5: RAG Retriever — 근거 chunk 검색 (판단을 바꾸지 않음, 근거만 수집)
+    # 품목 미확정(CONFIRMED/CANDIDATE 없음 or 인증유형 '확인 전')이면 품목 특정 근거 미수집
+    _top_conf_cand = next(
+        (c for c in legal_product_candidates
+         if c.confidence_level in ("CONFIRMED", "CANDIDATE")),
+        None,
+    )
+    _top_legal_name = _top_conf_cand.legal_product_name if _top_conf_cand else ""
+    _cert_type = (cert_diagnosis.certification_type or "").strip()
+    _allow_category_specific = (
+        _top_conf_cand is not None
+        and _cert_type not in ("", "확인 전", "미정")
+    )
+
+    retrieved_chunks = []
+    rag_used_ids: list = []
+    rag_refs: list = []
+    rag = (app_data or {}).get("rag_retriever")
+    if rag is not None and getattr(rag, "available", False):
+        try:
+            _query_parts = [
+                request.product_name or "",
+                request.user_query or "",
+                request.target_age or "",
+                request.material_text or "",
+                request.power_type or "",
+                "배터리 포함" if request.battery_included else "",
+                request.import_or_manufacture or "",
+            ]
+            # 품목이 확정된 경우에만 rule 결과를 query에 추가 (불확실 입력 과확정 방지)
+            if _allow_category_specific:
+                _query_parts.append(_top_legal_name)
+                _query_parts.append(_top_conf_cand.display_product_name or "")
+                _query_parts.append(_cert_type)
+                _query_parts.extend(cert_diagnosis.applied_standards or [])
+                _query_parts.extend(recall_summary.top_recall_reasons or [])
+                if kc_summary.matched_category:
+                    _query_parts.append(kc_summary.matched_category)
+            _query_text = " ".join(p for p in _query_parts if p)
+
+            _product_tokens = meaningful_tokens(tokenize(request.product_name or ""))
+            _mp_tokens = meaningful_tokens(
+                tokenize(" ".join(filter(None, [
+                    request.material_text or "",
+                    request.power_type or "",
+                    "배터리" if request.battery_included else "",
+                ])))
+            )
+
+            retrieved_chunks = rag.retrieve(
+                query_text=_query_text,
+                top_legal_name=_top_legal_name,
+                cert_type=_cert_type,
+                product_tokens=_product_tokens,
+                material_power_tokens=_mp_tokens,
+                allow_category_specific=_allow_category_specific,
+            )
+            rag_used_ids, rag_refs = collect_refs(retrieved_chunks)
+            logger.info("Phase 6.5 RAG: %d chunk 검색 (allow_specific=%s)",
+                        len(retrieved_chunks), _allow_category_specific)
+        except Exception as e:
+            logger.warning("RAG retriever 검색 실패 (무시): %s", e)
+
     # Build initial response without markdown
     response = DiagnosisResponse(
         case_id=f"case_{uuid.uuid4().hex[:8]}",
@@ -120,8 +185,11 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
         kc_certification_summary=kc_summary,
         launch_checklist=launch_checklist,
         final_report_markdown="",
-        used_rag_chunk_ids=[],
-        source_refs=list(dict.fromkeys(cert_source_refs + inst_source_refs + recall_source_refs + kc_source_refs)),
+        used_rag_chunk_ids=rag_used_ids,
+        source_refs=list(dict.fromkeys(
+            cert_source_refs + inst_source_refs + recall_source_refs
+            + kc_source_refs + rag_refs
+        )),
         model_name="Baseline (Template-only)",
         disclaimer="본 결과는 입력된 데이터를 바탕으로 한 예비 진단 결과이며, 최종 법적 판단 기준이 될 수 없습니다."
     )
@@ -133,7 +201,7 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
 
     if _settings.ENABLE_LLM:
         try:
-            md_report = generate_llm_report(response)
+            md_report = generate_llm_report(response, retrieved_chunks=retrieved_chunks)
             response.final_report_markdown = md_report
             response.report_generation_mode = "llm"
             response.model_name = _settings.HF_MODEL_NAME

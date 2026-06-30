@@ -23,10 +23,33 @@ USER_PROMPT_TEMPLATE = """\
 아래는 제품안전 사전 진단 보고서 초안입니다.
 문장을 더 자연스럽고 읽기 쉽게 다듬어 주세요.
 데이터 값, 섹션 구조, 체크리스트 항목은 변경하지 마세요.
-
+{retrieved_context}
 ---
 {template_report}
 ---
 
 수정된 보고서 전문만 출력하세요. 추가 설명·주석 없이 보고서만 출력하세요.\
 """
+
+
+def build_retrieved_context(retrieved_chunks) -> str:
+    """검색된 근거 chunk를 프롬프트용 참고 블록으로 구성.
+
+    LLM은 이 chunk들을 '근거 확인용'으로만 참고하며, 여기 없는 기준/사례를
+    새로 만들면 안 된다. chunk가 없으면 빈 문자열 반환.
+    """
+    if not retrieved_chunks:
+        return ""
+    lines = [
+        "",
+        "[참고 근거 chunk — 아래 내용 범위 안에서만 사실을 확인하세요. "
+        "여기 없는 기준·사례·기관·인증유형을 새로 만들지 마세요.]",
+    ]
+    for c in retrieved_chunks:
+        title = c.get("title") or c.get("document_type") or ""
+        text = (c.get("chunk_text") or "").replace("\n", " ").strip()
+        if len(text) > 300:
+            text = text[:300] + "…"
+        lines.append(f"- ({c.get('document_type','')}) {title}: {text}")
+    lines.append("")
+    return "\n".join(lines)

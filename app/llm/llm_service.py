@@ -110,8 +110,14 @@ def _validate(text: str) -> bool:
     return True
 
 
-def generate_llm_report(response: DiagnosisResponse) -> str:
+def generate_llm_report(
+    response: DiagnosisResponse,
+    retrieved_chunks: Optional[list] = None,
+) -> str:
     """LLM으로 보고서 문장 정제.
+
+    retrieved_chunks: RAG retriever가 찾은 근거 chunk (선택). 프롬프트에 참고
+        블록으로 포함되며, LLM은 이 범위 밖 사실을 만들면 안 됨.
 
     반환값: 정제된 Markdown 보고서 문자열.
     실패 시 RuntimeError/ValueError 발생 → 호출자가 template fallback으로 처리.
@@ -121,17 +127,21 @@ def generate_llm_report(response: DiagnosisResponse) -> str:
             "LLM 비활성화 (ENABLE_LLM=false). 기존 템플릿 보고서를 사용합니다."
         )
 
-    from app.llm.prompts import SYSTEM_PROMPT, USER_PROMPT_TEMPLATE
+    from app.llm.prompts import (
+        SYSTEM_PROMPT, USER_PROMPT_TEMPLATE, build_retrieved_context,
+    )
     from app.services.report_service import generate_markdown_report
 
     template_report = generate_markdown_report(response)
+    retrieved_context = build_retrieved_context(retrieved_chunks)
 
     pipe = _get_pipeline()
 
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": USER_PROMPT_TEMPLATE.format(
-            template_report=template_report
+            template_report=template_report,
+            retrieved_context=retrieved_context,
         )},
     ]
 

@@ -10,6 +10,7 @@ from app.schemas.request import DiagnosisRequest
 from app.schemas.response import DiagnosisResponse
 from app.services.diagnosis_service import run_diagnosis
 from app.search.recall_bm25 import RecallBM25Index
+from app.search.rag_retriever import RagRetriever
 
 import logging
 logger = logging.getLogger(__name__)
@@ -21,6 +22,7 @@ app_data: Dict[str, Any] = {
     "rag_chunk_all": [],
     "kc_agg": {},           # KC 인증 집계 인덱스: categoryName[2] → {total, valid, top_organs, samples}
     "recall_bm25_idx": None,  # RecallBM25Index — 리콜 BM25 검색용
+    "rag_retriever": None,    # RagRetriever — 근거 chunk 검색용
 }
 
 
@@ -146,7 +148,17 @@ async def lifespan(app: FastAPI):
     else:
         app_data["rag_chunk_all"] = []
         logger.warning("rag_chunk_all*.jsonl 파일 없음 (skipped)")
-        
+
+    # RAG Retriever 인덱스 구축 (rag_chunk_all 로드 직후)
+    try:
+        rag_chunks = app_data.get("rag_chunk_all") or []
+        if rag_chunks:
+            app_data["rag_retriever"] = RagRetriever(rag_chunks)
+        else:
+            logger.warning("rag_chunk_all 비어있어 RAG retriever 미구축")
+    except Exception as e:
+        logger.warning("RAG retriever 구축 실패 (skipped): %s", e)
+
     yield
     # Cleanup on shutdown
     app_data.clear()
@@ -159,13 +171,20 @@ app = FastAPI(
 
 @app.get("/health")
 def health_check():
+    recall_idx = app_data.get("recall_bm25_idx")
+    rag = app_data.get("rag_retriever")
     return {
         "status": "ok",
         "loaded": {
             "master_json": settings.MASTER_JSON_DIR.exists() and bool(app_data["master_json"]),
             "safety_json": settings.SAFETY_JSON_DIR.exists() and bool(app_data["safety_json"]),
             "rag_chunk_all": settings.RAG_JSONL_DIR.exists() and bool(app_data["rag_chunk_all"]),
-            "llm": False # Set to false initially as per MVP requirements
+            # 리콜 BM25 / RAG retriever / KC 인덱스 로드 상태 (팀장 확인용)
+            "recall_bm25": bool(getattr(recall_idx, "available", False)),
+            "rag_retriever": bool(getattr(rag, "available", False)),
+            "rag_chunk_count": getattr(rag, "chunk_count", 0),
+            "kc_index": bool(app_data.get("kc_agg")),
+            "llm": settings.ENABLE_LLM,  # 기본 false (MVP), 모델 다운로드는 첫 /diagnose 시 lazy
         }
     }
 
