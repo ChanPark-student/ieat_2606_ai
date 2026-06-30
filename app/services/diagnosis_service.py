@@ -112,18 +112,28 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
         disclaimer="본 결과는 입력된 데이터를 바탕으로 한 예비 진단 결과이며, 최종 법적 판단 기준이 될 수 없습니다."
     )
     
-    # Phase 7: Markdown Report Generation with LLM fallback
-    try:
-        from app.llm.llm_service import generate_llm_report
-        
-        md_report = generate_llm_report(response)
-        response.final_report_markdown = md_report
-        from app.core.config import settings
-        response.model_name = settings.HF_MODEL_NAME
-    except Exception as e:
-        logger.warning(f"LLM report generation failed or not configured: {e}. Falling back to template-only report.")
-        md_report = generate_markdown_report(response)
-        response.final_report_markdown = md_report
+    # Phase 7/8: Markdown 보고서 생성
+    # ENABLE_LLM=true 이면 LLM으로 문장 정제 시도, 실패하면 템플릿 fallback
+    from app.core.config import settings as _settings
+    from app.llm.llm_service import generate_llm_report
+
+    if _settings.ENABLE_LLM:
+        try:
+            md_report = generate_llm_report(response)
+            response.final_report_markdown = md_report
+            response.report_generation_mode = "llm"
+            response.model_name = _settings.HF_MODEL_NAME
+            logger.info("LLM 보고서 생성 성공 (model=%s)", _settings.HF_MODEL_NAME)
+        except Exception as e:
+            logger.warning(
+                "LLM 보고서 생성 실패 → 템플릿 fallback: %s", e
+            )
+            response.final_report_markdown = generate_markdown_report(response)
+            response.report_generation_mode = "template"
+            response.model_name = "Baseline (Template-only)"
+    else:
+        response.final_report_markdown = generate_markdown_report(response)
+        response.report_generation_mode = "template"
         response.model_name = "Baseline (Template-only)"
-    
+
     return response

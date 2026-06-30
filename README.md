@@ -97,13 +97,41 @@ pip install -r requirements.txt
 
 ### 4. 환경변수 설정
 
-프로젝트 루트에 `.env` 파일을 만들고 아래 항목을 설정합니다.  
-HF_TOKEN은 LLM 연동 시에만 필요합니다. 현재 LLM은 미구현이므로 빈 값으로 두어도 서버가 정상 실행됩니다.
+프로젝트 루트에 `.env` 파일을 만들고 아래 항목을 설정합니다.
+
+**기본 설정 (LLM 비활성화 — 템플릿 보고서 사용)**
 
 ```env
+ENABLE_LLM=false
 HF_TOKEN=
-HF_MODEL_NAME=kakaocorp/kanana-1.5-2.1b-instruct-2505
+HF_MODEL_NAME=Qwen/Qwen2.5-1.5B-Instruct
+LLM_MAX_NEW_TOKENS=1200
+LLM_TEMPERATURE=0.2
 ```
+
+> **기본값은 `ENABLE_LLM=false`입니다.** LLM을 사용하지 않아도 모든 기능이 정상 동작합니다.  
+> 모델 다운로드 없이 서버가 즉시 실행됩니다.
+
+**LLM 활성화 설정 (선택)**
+
+LLM을 사용하여 보고서 문장을 자연스럽게 정제하려면:
+
+1. `.env`에서 `ENABLE_LLM=true`로 변경합니다.
+2. `requirements.txt`에서 LLM 의존성 주석을 해제한 뒤 설치합니다.
+
+```bash
+pip install transformers>=4.45.0 accelerate>=0.26.0 torch>=2.1.0
+```
+
+3. 서버 실행 후 `/diagnose` 첫 요청 시 모델을 자동으로 다운로드합니다 (모델 크기에 따라 수 분 소요).
+
+> **주의**: 모델 캐시(`hf_cache/`), 모델 가중치 파일(`.bin`, `.safetensors`, `.gguf`)은 `.gitignore`에 등록되어 있으며 GitHub에 업로드되지 않습니다.
+
+**LLM 비활성화 또는 실패 시 동작**
+
+- `ENABLE_LLM=false`: 즉시 템플릿 보고서 반환
+- `ENABLE_LLM=true`이지만 모델 로딩 실패 또는 LLM 출력 검증 실패: 템플릿 보고서로 자동 fallback
+- 응답 필드 `report_generation_mode`로 실제 사용 방식 확인 가능 (`"template"` 또는 `"llm"`)
 
 ### 5. 데이터 파일 확인
 
@@ -281,7 +309,7 @@ data/safety_json/kc_certification.json
 | KC 유사 인증사례 검색 | ✅ 완료 |
 | 출시 전 체크리스트 생성 | ✅ 완료 |
 | Markdown 보고서 생성 (템플릿 기반) | ✅ 완료 |
-| LLM 연동 보고서 생성 | ⏳ 미구현 (템플릿 fallback 동작 중) |
+| LLM 연동 보고서 생성 (선택) | ✅ 완료 (`ENABLE_LLM=true` 설정 시 활성화) |
 
 ---
 

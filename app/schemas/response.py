@@ -53,6 +53,8 @@ class DiagnosisResponse(BaseModel):
     kc_certification_summary: KcCertificationSummary
     launch_checklist: List[str]
     final_report_markdown: str
+    # "template": 템플릿 기반, "llm": LLM 정제 사용
+    report_generation_mode: str = "template"
     used_rag_chunk_ids: List[str]
     source_refs: List[str]
     model_name: str
