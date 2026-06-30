@@ -42,7 +42,7 @@ def _build_kc_agg(raw: List[Dict]) -> Dict[str, Any]:
         state = r.get("certState") or ""
         if state == "적합":
             entry["valid"] += 1
-            if len(entry["samples"]) < 10:
+            if len(entry["samples"]) < 50:  # 50개 보관 → query 시 keyword 정렬 풀 확보
                 entry["samples"].append({
                     "certNum": r.get("certNum"),
                     "certOrganName": r.get("certOrganName"),

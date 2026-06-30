@@ -57,6 +57,57 @@ def _overlap_ratio(a: str, b: str) -> float:
     return len(words_a & words_b) / min(len(words_a), len(words_b))
 
 
+def _prioritize_checklist(
+    items: List[str],
+    input_summary: dict,
+    legal_name: str,
+) -> List[str]:
+    """입력 제품 특성에 따라 체크리스트 항목 우선순위 정렬.
+
+    원본 데이터는 유지하며 표시 순서만 조정.
+    점수가 높을수록 앞에, 낮을수록 뒤에 표시된다.
+    """
+    material = (input_summary.get("material_text") or "").lower()
+    power_type = (input_summary.get("power_type") or "").lower()
+    battery_included = bool(input_summary.get("battery_included", False))
+    product_name = (input_summary.get("product_name") or "").lower()
+
+    # 우선 키워드: 입력 조건에서 동적으로 결정
+    priority_kw: List[str] = []
+    depriority_kw: List[str] = []
+
+    if battery_included or "건전지" in power_type or "배터리" in power_type or "충전" in power_type:
+        priority_kw += ["배터리", "전지", "충전", "전원"]
+
+    if "플라스틱" in material or "합성수지" in material or "pvc" in material or "abs" in material:
+        priority_kw += ["가소제", "프탈레이트"]
+
+    if "금속" in material or "나사" in material or "철" in material or "알루미늄" in material:
+        priority_kw += ["납", "카드뮴", "중금속", "유해원소"]
+
+    if "완구" in legal_name or "장난감" in product_name:
+        priority_kw += ["작은 부품", "날카로운", "자석", "기계적", "작동"]
+
+    # 섬유/가죽/의류/온열은 관련 제품이 아니면 후순위
+    is_fabric_product = any(k in legal_name for k in ["섬유", "의류"]) or \
+                        any(k in material for k in ["섬유", "면", "폴리", "나일론", "가죽"])
+    if not is_fabric_product:
+        depriority_kw += ["섬유", "가죽", "아릴아민", "아조염료", "온열"]
+
+    def _score(item: str) -> int:
+        item_l = item.lower()
+        score = 0
+        for kw in priority_kw:
+            if kw in item_l:
+                score += 10
+        for kw in depriority_kw:
+            if kw in item_l:
+                score -= 5
+        return score
+
+    return sorted(items, key=lambda x: -_score(x))
+
+
 def generate_markdown_report(response: DiagnosisResponse) -> str:
     """Phase 7: 최종 Markdown 보고서 생성 (Rule-based Baseline).
 
@@ -102,7 +153,8 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
         if v is None or v == "" or v == [] or v is False:
             continue
         label = label_map.get(k, k)
-        md += f"- **{label}**: {v}\n"
+        display_v = "예" if v is True else v
+        md += f"- **{label}**: {display_v}\n"
     md += "\n"
 
     # ── 2. 법정 품목명 후보 ───────────────────────────────────────────────
@@ -113,8 +165,21 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
             "제품의 사용연령, 용도, 소재를 추가로 입력하면 더 정확한 진단이 가능합니다.\n\n"
         )
     else:
-        # 상위 1개는 상세 표시, 나머지는 간략 표시
-        for i, cand in enumerate(cands):
+        _has_confirmed_cand = any(c.confidence_level == "CONFIRMED" for c in cands)
+        # CONFIRMED가 있으면 매우 낮은 NEEDS_CONFIRMATION 후보는 보고서에서 생략
+        _HIDE_THRESHOLD = 0.10
+        if _has_confirmed_cand:
+            visible = [
+                c for c in cands
+                if not (c.confidence_level == "NEEDS_CONFIRMATION"
+                        and c.confidence_score < _HIDE_THRESHOLD)
+            ]
+            hidden_count = len(cands) - len(visible)
+        else:
+            visible = cands
+            hidden_count = 0
+
+        for i, cand in enumerate(visible):
             level = cand.confidence_level
             level_desc = _CONFIDENCE_DESC.get(level, "")
             if i == 0:
@@ -129,11 +194,12 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
                     )
                 md += "\n"
             else:
-                # 하위 후보는 간략 1줄
                 md += (
                     f"- **{cand.display_product_name}** (`{cand.legal_product_name}`) "
                     f"— `{level}` {cand.confidence_score:.2f}\n"
                 )
+        if hidden_count > 0:
+            md += f"- *기타 낮은 신뢰도 후보 {hidden_count}건은 내부 검토용으로 생략됩니다.*\n"
         md += "\n"
 
     # ── 3. 예상 인증유형 및 적용 안전기준 ────────────────────────────────
@@ -219,16 +285,17 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
             md += f"- [ ] {pt}\n"
         md += "\n"
 
-    # ── 6. KC 유사 인증사례 참고 ──────────────────────────────────────────
-    md += "## 6. KC 유사 인증사례 참고\n\n"
+    # ── 6. KC 동일 품목군 인증사례 참고 ────────────────────────────────────
+    md += "## 6. KC 동일 품목군 인증사례 참고\n\n"
 
-    if kc.similar_cert_count > 0 and top_legal_name:
+    if kc.similar_cert_count > 0:
+        category_label = kc.matched_category or top_legal_name
         md += (
-            f"「{top_legal_name}」 품목군 관련 KC 인증 데이터에서 "
-            f"**{kc.similar_cert_count:,}건**의 유사 인증사례를 확인했습니다.\n\n"
+            f"「{category_label}」 품목군 KC 인증 데이터에서 "
+            f"**{kc.similar_cert_count:,}건**의 인증사례를 확인했습니다.\n\n"
         )
         md += (
-            "> **주의**: 유사 인증사례는 최종 인증 가능성을 의미하지 않습니다. "
+            "> **주의**: 인증사례는 최종 인증 가능성을 의미하지 않습니다. "
             "실제 인증 여부는 제품 상세 스펙과 시험 결과에 따라 달라질 수 있습니다.\n\n"
         )
 
@@ -236,7 +303,22 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
             md += f"**주요 인증기관**: {', '.join(kc.top_cert_organ_names)}\n\n"
 
         if kc.representative_models:
-            md += "**대표 인증 사례 (참고용)**\n\n"
+            # 입력 제품 키워드와 겹치는 모델이 있는지 확인
+            _input_product = str(response.input_summary.get("product_name") or "").lower()
+            _input_query = str(response.input_summary.get("user_query") or "").lower()
+            _qwords = {w for w in (_input_product + " " + _input_query).split() if len(w) > 1}
+            _has_match = any(
+                any(kw in m.lower() for kw in _qwords)
+                for m in kc.representative_models
+            )
+            if _has_match:
+                md += "**동일 품목군 대표 인증사례 (참고용, 관련도 순 정렬)**\n\n"
+            else:
+                md += "**동일 품목군 내 대표 인증사례 (참고용)**\n\n"
+                md += (
+                    f"> 입력 제품과 직접 연관된 KC 인증 모델이 없을 수 있습니다. "
+                    f"「{category_label}」 품목군 전체 기준 사례를 표시합니다.\n\n"
+                )
             for model in kc.representative_models:
                 md += f"- {model}\n"
             md += "\n"
@@ -248,9 +330,12 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
     md += "## 7. 출시 전 확인 체크리스트\n\n"
 
     if checklist:
-        # 예방 포인트와 중복 제거
+        # 예방 포인트와 중복 제거 → 입력 제품 특성으로 우선순위 정렬
         deduped = _dedup_checklist(checklist, recall.prevention_points)
-        items_to_show = deduped if deduped else checklist
+        base_items = deduped if deduped else checklist
+        items_to_show = _prioritize_checklist(
+            base_items, response.input_summary, top_legal_name
+        )
         for item in items_to_show:
             md += f"- [ ] {item}\n"
     else:

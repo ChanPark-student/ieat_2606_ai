@@ -80,9 +80,15 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
         recall_source_refs = []
 
     # Phase 6: KC 유사 인증사례 요약
+    _kc_query_text = " ".join(filter(None, [
+        request.product_name or "",
+        request.user_query or "",
+        request.material_text or "",
+    ]))
     try:
         kc_summary, kc_source_refs = get_kc_summary(
-            legal_product_candidates, cert_diagnosis, app_data
+            legal_product_candidates, cert_diagnosis, app_data,
+            query_text=_kc_query_text,
         )
     except Exception as e:
         logger.warning(f"kc summary failed: {e}")

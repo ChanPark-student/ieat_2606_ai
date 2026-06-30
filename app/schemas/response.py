@@ -41,6 +41,7 @@ class KcCertificationSummary(BaseModel):
     top_cert_organ_names: List[str]
     representative_models: List[str]
     note: str
+    matched_category: str = ""  # KC 인덱스에서 매칭된 카테고리명 (예: "완구")
 
 class DiagnosisResponse(BaseModel):
     case_id: str

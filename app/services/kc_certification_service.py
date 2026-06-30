@@ -76,6 +76,14 @@ def _pick_target_names(candidates: List[LegalProductCandidate]) -> List[str]:
     return [name] if name else []
 
 
+def _sample_relevance(sample: Dict[str, Any], query_words: set) -> int:
+    """query 키워드와 sample 모델명/제품명의 겹치는 단어 수 반환 (정렬용 점수)."""
+    model = (sample.get("modelName") or "").lower()
+    product = (sample.get("productName") or "").lower()
+    combined = model + " " + product
+    return sum(1 for w in query_words if len(w) > 1 and w in combined)
+
+
 def _format_sample(cert: Dict[str, Any]) -> str:
     """KC sample certification을 representative_models 문자열로 변환."""
     model = _safe_str(cert.get("modelName"))
@@ -116,6 +124,7 @@ def get_kc_summary(
     candidates: List[LegalProductCandidate],
     cert_diagnosis: CertificationDiagnosis,
     app_data: Dict[str, Any],
+    query_text: str = "",
 ) -> Tuple[KcCertificationSummary, List[str]]:
     """Phase 6: KC 유사 인증사례 요약.
 
@@ -130,6 +139,7 @@ def get_kc_summary(
         top_cert_organ_names=[],
         representative_models=[],
         note=_NOTE_NO_DATA,
+        matched_category="",
     )
 
     if not kc_agg:
@@ -161,6 +171,7 @@ def get_kc_summary(
                 top_cert_organ_names=[],
                 representative_models=[],
                 note=_NOTE_SELF_CONFORMITY,
+                matched_category="",
             ), []
         return empty, []
 
@@ -174,12 +185,21 @@ def get_kc_summary(
         matched_legal_name, matched_kc_key, cert_count,
     )
 
-    # representative_models: 모델명 있는 항목 우선
+    # query 키워드로 samples 정렬: 입력 제품과 연관도 높은 사례를 먼저 표시
+    query_words = {w for w in query_text.lower().split() if len(w) > 1} if query_text else set()
+    if query_words:
+        samples_sorted = sorted(
+            (s for s in samples if isinstance(s, dict)),
+            key=lambda s: _sample_relevance(s, query_words),
+            reverse=True,
+        )
+    else:
+        samples_sorted = [s for s in samples if isinstance(s, dict)]
+
+    # representative_models: 정렬된 순서로 모델명 있는 항목 우선, 최대 _MAX_MODELS개
     rep_models: List[str] = []
     seen_models: set = set()
-    for cert in samples:
-        if not isinstance(cert, dict):
-            continue
+    for cert in samples_sorted:
         model = _safe_str(cert.get("modelName"))
         if model and model in seen_models:
             continue
@@ -202,6 +222,7 @@ def get_kc_summary(
             top_cert_organ_names=top_organs,
             representative_models=rep_models,
             note=_NOTE,
+            matched_category=matched_kc_key,
         ),
         source_refs,
     )
