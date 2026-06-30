@@ -65,9 +65,17 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
         inst_source_refs = []
     
     # Phase 5: 국내 리콜 사유 검색
+    _recall_query_text = " ".join(filter(None, [
+        request.product_name or "",
+        request.user_query or "",
+        request.material_text or "",
+        request.power_type or "",
+        "배터리" if request.battery_included else "",
+    ]))
     try:
         recall_summary, recall_source_refs = get_recall_summary(
-            legal_product_candidates, cert_diagnosis, app_data
+            legal_product_candidates, cert_diagnosis, app_data,
+            query_text=_recall_query_text or None,
         )
     except Exception as e:
         logger.warning(f"recall summary failed: {e}")

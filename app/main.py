@@ -9,6 +9,7 @@ from app.loaders.jsonl_loader import load_jsonl
 from app.schemas.request import DiagnosisRequest
 from app.schemas.response import DiagnosisResponse
 from app.services.diagnosis_service import run_diagnosis
+from app.search.recall_bm25 import RecallBM25Index
 
 import logging
 logger = logging.getLogger(__name__)
@@ -18,7 +19,8 @@ app_data: Dict[str, Any] = {
     "master_json": {},
     "safety_json": {},
     "rag_chunk_all": [],
-    "kc_agg": {},       # KC 인증 집계 인덱스: categoryName[2] → {total, valid, top_organs, samples}
+    "kc_agg": {},           # KC 인증 집계 인덱스: categoryName[2] → {total, valid, top_organs, samples}
+    "recall_bm25_idx": None,  # RecallBM25Index — 리콜 BM25 검색용
 }
 
 
@@ -105,6 +107,16 @@ async def lifespan(app: FastAPI):
     else:
         app_data["safety_json"]["domestic_recall"] = []
         logger.warning("domestic_recall.json 없음 (skipped)")
+
+    # BM25 인덱스 구축 (domestic_recall 로드 직후)
+    try:
+        recall_records = app_data["safety_json"].get("domestic_recall") or []
+        if recall_records:
+            app_data["recall_bm25_idx"] = RecallBM25Index(recall_records)
+        else:
+            logger.warning("domestic_recall 비어있어 BM25 인덱스 미구축")
+    except Exception as e:
+        logger.warning("BM25 인덱스 구축 실패 (skipped): %s", e)
 
     # KC 인증: 226MB raw 목록을 집계 후 즉시 폐기 → compact index만 유지
     kc_path = settings.SAFETY_JSON_DIR / "kc_certification.json"

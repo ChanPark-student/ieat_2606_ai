@@ -257,6 +257,11 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
         )
     elif recall.recall_count > 0:
         md += f"유사 국내 리콜 사례: **{recall.recall_count}건**\n\n"
+    elif recall.supplemental_cases:
+        md += (
+            "해당 품목군의 직접 매칭 리콜 사례는 없으나, "
+            "입력 내용과 유사한 리콜 사례를 참고용으로 제공합니다.\n\n"
+        )
     else:
         md += "해당 품목군의 국내 리콜 사례 정보가 없습니다.\n\n"
 
@@ -269,6 +274,12 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
     if recall.representative_cases:
         md += "**대표 리콜 사례**\n\n"
         for case in recall.representative_cases:
+            md += f"- {case}\n"
+        md += "\n"
+
+    if recall.supplemental_cases:
+        md += "**보조 검색으로 확인된 유사 리콜 사례 (참고용)**\n\n"
+        for case in recall.supplemental_cases:
             md += f"- {case}\n"
         md += "\n"
 

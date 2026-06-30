@@ -4,6 +4,7 @@ uvicorn
 pydantic
 pydantic-settings
 python-dotenv
+rank-bm25
 
 # ──────────────────────────────────────────────────────────────────────────────
 # LLM 선택 의존성 (ENABLE_LLM=true 사용 시 아래 주석을 해제 후 설치)

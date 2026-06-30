@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections import Counter
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from app.schemas.response import (
     CertificationDiagnosis,
@@ -51,10 +51,7 @@ def _filter_recalls(
     target_names: List[str],
     recall_data: List[Dict[str, Any]],
 ) -> List[Dict[str, Any]]:
-    """mapped_legal_product_name 기준 1차 필터링.
-
-    1차: mapped_legal_product_name이 target_names에 속하는 레코드
-    """
+    """mapped_legal_product_name 기준 1차 필터링."""
     if not target_names or not isinstance(recall_data, list):
         return []
 
@@ -95,17 +92,17 @@ def _description_score(record: Dict[str, Any]) -> int:
 
 def _build_representative_cases(
     records: List[Dict[str, Any]],
+    bm25_scores: Optional[Dict[str, float]] = None,
 ) -> Tuple[List[str], List[Any]]:
     """대표 리콜 사례를 한 줄 문자열로 구성.
 
-    - 설명 필드(harmDscr 우선)가 있는 사례를 먼저 선택
-    - recallProductName 기준 dedup: 같은 제품명 중 설명이 가장 풍부한 레코드 선택
-    - 모든 설명 필드가 비어 있으면 "상세 사유 없음" 명시
+    - recallProductName 기준 dedup: 설명이 가장 풍부한 레코드 선택
+    - bm25_scores 제공 시: BM25 점수 우선 정렬, description_score 보조
+    - 없으면: description_score 내림차순 정렬
 
     Returns:
-        (cases: List[str], uids: List[Any])  — source_refs용 uid 목록 함께 반환
+        (cases: List[str], uids: List[Any])
     """
-    # recallProductName 기준 dedup: 가장 description_score가 높은 레코드 유지
     best_by_name: Dict[str, Dict[str, Any]] = {}
     for r in records:
         product = _safe_str(r.get("recallProductName"))
@@ -115,8 +112,13 @@ def _build_representative_cases(
         if existing is None or _description_score(r) > _description_score(existing):
             best_by_name[product] = r
 
-    # 설명 충실도 내림차순 정렬
-    ranked = sorted(best_by_name.values(), key=_description_score, reverse=True)
+    if bm25_scores:
+        def _sort_key(r: Dict[str, Any]) -> Tuple[float, int]:
+            uid = str(r.get("recallUid", ""))
+            return (-bm25_scores.get(uid, 0.0), -_description_score(r))
+        ranked = sorted(best_by_name.values(), key=_sort_key)
+    else:
+        ranked = sorted(best_by_name.values(), key=_description_score, reverse=True)
 
     cases: List[str] = []
     uids: List[Any] = []
@@ -153,11 +155,7 @@ def _build_prevention_points(
     legal_name: str,
     check_items: List[Dict[str, Any]],
 ) -> List[str]:
-    """safety_standard_check_items에서 리콜 reason_keywords와 매칭되는 예방 확인사항 추출.
-
-    1순위: product_name == legal_name AND hazard_keyword in top_reason_keywords
-    2순위: hazard_keyword in top_reason_keywords (품목 무관)
-    """
+    """safety_standard_check_items에서 리콜 reason_keywords와 매칭되는 예방 확인사항 추출."""
     if not top_reason_keywords or not isinstance(check_items, list):
         return []
 
@@ -191,7 +189,7 @@ def _build_prevention_points(
             if not isinstance(item, dict):
                 continue
             if _safe_str(item.get("product_name")) == legal_name:
-                continue  # 1순위에서 처리됨
+                continue
             hk = _safe_str(item.get("hazard_keyword")).lower()
             if any(hk and kw in hk or hk in kw for kw in kw_set):
                 try_add(item)
@@ -205,20 +203,22 @@ def get_recall_summary(
     candidates: List[LegalProductCandidate],
     cert_diagnosis: CertificationDiagnosis,
     app_data: Dict[str, Any],
+    query_text: Optional[str] = None,
 ) -> Tuple[RecallReasonSummary, List[str]]:
     """Phase 5: 국내 리콜 사유 검색 및 예방 확인사항 생성.
 
+    query_text가 주어지면:
+    - exact match 레코드를 BM25 점수 내림차순으로 정렬해 대표 사례 선택
+    - exact match가 없으면 BM25 보조 검색으로 유사 사례 supplemental_cases 제공
+
     Returns:
         (RecallReasonSummary, source_refs)
-
-    - 데이터에 없는 리콜 사례/사유는 생성하지 않음
-    - recall 데이터 없으면 recall_count=0, 빈 리스트 반환 (서버 죽지 않음)
-    - 리콜 사유는 단순 나열 대신 safety_standard_check_items 기반 예방 확인사항으로 변환
     """
     safety = (app_data or {}).get("safety_json", {})
     master = (app_data or {}).get("master_json", {})
     recall_data: List[Dict] = safety.get("domestic_recall") or []
     check_items: List[Dict] = master.get("safety_standard_check_items") or []
+    bm25_idx = (app_data or {}).get("recall_bm25_idx")
 
     empty = RecallReasonSummary(
         recall_count=0,
@@ -243,16 +243,42 @@ def get_recall_summary(
         logger.warning("Phase 5 recall filter 실패: %s", e)
         return empty, []
 
+    # ── exact match 없을 때: BM25 보조 검색 ──────────────────────────────
     if not matched:
-        logger.info(
-            "Phase 5: '%s' 관련 리콜 레코드 없음", ", ".join(target_names)
-        )
+        logger.info("Phase 5: '%s' 관련 리콜 레코드 없음", ", ".join(target_names))
+
+        supplemental_cases: List[str] = []
+        if query_text and bm25_idx and bm25_idx.available:
+            try:
+                exclude = set(n.lower() for n in target_names if n)
+                bm25_results = bm25_idx.search_top_k(
+                    query_text, top_k=20, exclude_legal_names=exclude
+                )
+                if bm25_results:
+                    # 최고점 30% 미만 제거
+                    max_score = bm25_results[0][1]
+                    threshold = max_score * 0.3
+                    filtered = [(r, s) for r, s in bm25_results if s >= threshold]
+                    sup_records = [r for r, _ in filtered]
+                    sup_scores = {
+                        str(r.get("recallUid", "")): s for r, s in filtered
+                    }
+                    sup_cases, _ = _build_representative_cases(sup_records, sup_scores)
+                    supplemental_cases = sup_cases
+                    logger.info(
+                        "Phase 5 BM25 보조 검색: %d건 (threshold=%.2f)",
+                        len(supplemental_cases), threshold,
+                    )
+            except Exception as e:
+                logger.warning("Phase 5 BM25 보조 검색 실패: %s", e)
+
         return (
             RecallReasonSummary(
                 recall_count=0,
                 top_recall_reasons=[],
                 representative_cases=[],
                 prevention_points=[],
+                supplemental_cases=supplemental_cases,
             ),
             [],
         )
@@ -264,19 +290,25 @@ def get_recall_summary(
     # ── reason_keywords 집계 ──────────────────────────────────────────────
     top_reasons = _aggregate_reason_keywords(matched)
 
-    # ── 대표 사례 구성 ────────────────────────────────────────────────────
-    rep_cases, rep_uids = _build_representative_cases(matched)
+    # ── BM25 점수로 대표 사례 정렬 ────────────────────────────────────────
+    bm25_scores: Optional[Dict[str, float]] = None
+    if query_text and bm25_idx and bm25_idx.available:
+        try:
+            bm25_scores = bm25_idx.score_records(query_text, matched)
+        except Exception as e:
+            logger.warning("Phase 5 BM25 score_records 실패: %s", e)
+
+    rep_cases, rep_uids = _build_representative_cases(matched, bm25_scores)
 
     # ── 예방 확인사항 (safety_standard_check_items 기반) ──────────────────
-    # 첫 번째 타겟 품목(가장 신뢰도 높은 후보) 기준
     primary_name = target_names[0] if target_names else ""
-    prevention = []
+    prevention: List[str] = []
     try:
         prevention = _build_prevention_points(top_reasons, primary_name, check_items)
     except Exception as e:
         logger.warning("Phase 5 prevention_points 생성 실패: %s", e)
 
-    # ── source_refs: 대표 사례로 표시된 uid를 모두 포함 ──────────────────
+    # ── source_refs ───────────────────────────────────────────────────────
     source_refs: List[str] = [f"domestic_recall:{primary_name}:{len(matched)}건"]
     for uid in rep_uids:
         source_refs.append(f"domestic_recall:uid={uid}")

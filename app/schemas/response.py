@@ -35,6 +35,7 @@ class RecallReasonSummary(BaseModel):
     top_recall_reasons: List[str]
     representative_cases: List[str]
     prevention_points: List[str]
+    supplemental_cases: List[str] = []  # BM25 보조 검색 결과 (exact match 없을 때)
 
 class KcCertificationSummary(BaseModel):
     similar_cert_count: int
