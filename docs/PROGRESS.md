@@ -22,7 +22,8 @@
 | Phase 4 | 기관 및 절차 안내 | ✅ 완료 |
 | Phase 5 | 국내 리콜 사유 검색 | ✅ 완료 |
 | Phase 6 | KC 유사 인증사례 | ✅ 완료 |
-| Phase 7 | LLM 보고서 생성 | ⏳ 미구현 |
+| Phase 7 | Markdown 보고서 품질 고도화 (템플릿 기반) | ✅ 완료 |
+| Phase 8 | LLM 보고서 생성 | ⏳ 미구현 |
 
 ---
 
@@ -388,11 +389,42 @@ kc_agg = {
 
 ---
 
+---
+
+### Phase 7 — Markdown 보고서 품질 고도화 (템플릿 기반)
+
+**수정 파일**: `app/services/report_service.py`
+
+#### 개선 항목
+
+| 섹션 | 변경 내용 |
+|---|---|
+| §2 법정 품목명 후보 | CONFIRMED/CANDIDATE/NEEDS_CONFIRMATION 별 한글 톤 설명 추가 |
+| §3 예상 인증유형 | 인증유형별 한 줄 설명 추가 (안전확인/안전인증/공급자적합성확인/확인 전). raw source_refs ID 제거. |
+| §4 기관 및 절차 | 공급자적합성확인 대상 자연스러운 설명: "지정기관 신고 없이 출시 가능하나 시험성적서·입증자료 5년 보관 의무" |
+| §5 리콜 | "리콜 데이터 기반 출시 전 위험 포인트" 섹션명으로 프레이밍 강화 |
+| §6 KC | count>0: "유사 인증사례는 최종 인증 가능성 아님" 주의 blockquote 추가. count=0: note만 표시 ("0건" 제거). |
+| §7 체크리스트 | `_dedup_checklist()`: 어절 중복 비율(60% 이상)로 prevention_points와 겹치는 항목 자동 제거. checklist가 빈 경우 기본 3개 안내. |
+| §8 추가 확인 | CONFIRMED 있으면 CANDIDATE 수준 확인 항목만 표시(노이즈 방지). 전부 NEEDS_CONFIRMATION이면 "입력 정보 보완 필요" + 4개 보완 항목. |
+| §9 안내 문구 | "본 결과는 공공데이터와 기준 데이터 기반의 사전 진단 참고자료이며, 최종 법적 판단은 관계기관 또는 전문가 확인이 필요합니다." 고정 |
+
+#### 테스트 결과 (docs/test_outputs/)
+
+| 파일 | 케이스 | 특이사항 |
+|---|---|---|
+| A_bag_report.md | 책가방 (아동용 섬유제품, 공급자적합성확인) | §4 공급자확인 자연스러운 설명, KC 2,094건 |
+| B_toy_car_report.md | 장난감 자동차 (완구, 안전확인) | §8 CONFIRMED → "확정됨" 메시지, KC 30,851건 |
+| C_infant_inner_report.md | 유아용 내의 (CANDIDATE) | §2 CANDIDATE 톤, KC 2,094건 |
+| D_kids_shirt_report.md | 아동용 티셔츠 (NEEDS_CONFIRMATION) | §3 "확인 전" blockquote, §8 보완 안내 |
+| E_unknown_report.md | 정체불명 (NEEDS_CONFIRMATION, KC 0건) | §6 note만 표시, §8 입력 보완 4항목 |
+
+---
+
 ## 현재 미구현 / 다음 단계 후보
 
 | 단계 | 항목 | 관련 파일 |
 |---|---|---|
-| Phase 7 | LLM 보고서 생성 | `app/llm/hf_generator.py` + `app/llm/prompts.py` |
+| Phase 8 | LLM 보고서 생성 | `app/llm/hf_generator.py` + `app/llm/prompts.py` |
 | 검색 고도화 | BM25 검색 | `app/search/bm25_search.py` |
 | 리콜 검색 확장 | unmapped 2,935건 BM25/임베딩 검색 | `app/services/recall_service.py` |
 
