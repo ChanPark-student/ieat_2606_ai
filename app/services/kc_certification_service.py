@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from app.schemas.response import (
     CertificationDiagnosis,
@@ -11,7 +11,6 @@ from app.schemas.response import (
 
 logger = logging.getLogger(__name__)
 
-_KC_DOCUMENT_TYPE = "KC_CERTIFICATION_SUMMARY"
 _MAX_MODELS = 5
 _NOTE = (
     "KC 인증정보는 유사 인증사례 확인용 보조 근거이며, "
@@ -24,36 +23,61 @@ _NOTE_NO_DATA = (
 
 _LEVEL_PRIORITY = {"CONFIRMED": 0, "CANDIDATE": 1, "NEEDS_CONFIRMATION": 2}
 
+# 법정 품목명 정규화 시 제거할 접두사 (길이 내림차순 — 긴 것부터 시도)
+_STRIP_PREFIXES = (
+    "어린이용 ", "유아용 ", "아동용 ", "어린이 ", "유아 ", "아동 ",
+)
+
 
 def _safe_str(val: Any) -> str:
     return str(val).strip() if val is not None else ""
 
 
-def _build_kc_index(rag_chunks: List[Any]) -> Dict[str, Dict[str, Any]]:
-    """rag_chunk_all에서 KC_CERTIFICATION_SUMMARY 청크를 추출해 product_name → chunk 인덱스 생성."""
-    index: Dict[str, Dict[str, Any]] = {}
-    if not isinstance(rag_chunks, list):
-        return index
-    for chunk in rag_chunks:
-        if not isinstance(chunk, dict):
-            continue
-        if chunk.get("document_type") != _KC_DOCUMENT_TYPE:
-            continue
-        if not chunk.get("is_active", True):
-            continue
-        product = _safe_str(chunk.get("product_name"))
-        if not product:
-            # metadata.legal_product_name_candidate 폴백
-            product = _safe_str(
-                (chunk.get("metadata") or {}).get("legal_product_name_candidate")
-            )
-        if product:
-            index[product] = chunk
-    return index
+def _normalize_name(name: str) -> str:
+    """법정 품목명 정규화: 앞 접두사 제거 + 괄호 내 공백 통일."""
+    n = name.strip()
+    for prefix in _STRIP_PREFIXES:
+        if n.startswith(prefix):
+            n = n[len(prefix):]
+            break
+    # 괄호 내 공백 정규화 "(보호 장구" → "(보호장구" 방향으로 비교할 때 사용
+    return n
+
+
+def _find_kc_match(legal_name: str, kc_agg: Dict[str, Any]) -> Optional[str]:
+    """법정 품목명을 KC 집계 인덱스 키에 3단계 매칭.
+
+    1. 정확 일치
+    2. substring 포함 관계 (A in B, B in A)
+    3. 정규화 후 정확 일치 또는 substring
+    반환: 매칭된 KC 카테고리 키, 없으면 None
+    """
+    if not legal_name or not kc_agg:
+        return None
+
+    # 1. 정확 일치
+    if legal_name in kc_agg:
+        return legal_name
+
+    # 2. substring 포함
+    for key in kc_agg:
+        if key in legal_name or legal_name in key:
+            return key
+
+    # 3. 정규화 후 비교
+    norm_legal = _normalize_name(legal_name)
+    for key in kc_agg:
+        norm_key = _normalize_name(key)
+        if norm_legal == norm_key:
+            return key
+        if norm_legal and norm_key and (norm_legal in norm_key or norm_key in norm_legal):
+            return key
+
+    return None
 
 
 def _pick_target_names(candidates: List[LegalProductCandidate]) -> List[str]:
-    """검색 대상 법정 품목명 목록 결정.
+    """검색 대상 법정 품목명 목록.
 
     CONFIRMED·CANDIDATE → 해당 품목들.
     NEEDS_CONFIRMATION만 → 최고점 1개 (과도한 union 방지).
@@ -68,24 +92,39 @@ def _pick_target_names(candidates: List[LegalProductCandidate]) -> List[str]:
     return [name] if name else []
 
 
-def _format_model(cert: Dict[str, Any]) -> str:
-    """sample_certifications 항목을 representative_models 문자열로 변환."""
-    model = _safe_str(cert.get("model_name"))
-    cert_num = _safe_str(cert.get("cert_num"))
-    organ = _safe_str(cert.get("cert_organ_name"))
-    state = _safe_str(cert.get("cert_state"))
+def _format_sample(cert: Dict[str, Any]) -> str:
+    """KC sample certification을 representative_models 문자열로 변환."""
+    model = _safe_str(cert.get("modelName"))
+    cert_num = _safe_str(cert.get("certNum"))
+    organ = _safe_str(cert.get("certOrganName"))
+    if "(" in organ:
+        organ_short = organ[organ.rfind("(")+1:organ.rfind(")")]
+    else:
+        organ_short = organ
+    state = _safe_str(cert.get("certState"))
+    cert_date = _safe_str(cert.get("certDate"))
+    import_div = _safe_str(cert.get("importDiv"))
+
+    # 날짜 포맷: "20151123" → "2015-11-23"
+    if len(cert_date) == 8 and cert_date.isdigit():
+        cert_date = f"{cert_date[:4]}-{cert_date[4:6]}-{cert_date[6:]}"
+
     parts = []
     if model:
         parts.append(model)
-    detail = []
+    details: List[str] = []
     if cert_num:
-        detail.append(f"인증번호: {cert_num}")
-    if organ:
-        detail.append(f"기관: {organ}")
+        details.append(f"인증번호: {cert_num}")
+    if organ_short:
+        details.append(f"기관: {organ_short}")
     if state:
-        detail.append(f"상태: {state}")
-    if detail:
-        parts.append(f"({', '.join(detail)})")
+        details.append(f"상태: {state}")
+    if cert_date:
+        details.append(f"인증일: {cert_date}")
+    if import_div:
+        details.append(f"{import_div}")
+    if details:
+        parts.append(f"({', '.join(details)})")
     return " ".join(parts) if parts else ""
 
 
@@ -96,11 +135,11 @@ def get_kc_summary(
 ) -> Tuple[KcCertificationSummary, List[str]]:
     """Phase 6: KC 유사 인증사례 요약.
 
-    - rag_chunk_all의 KC_CERTIFICATION_SUMMARY 청크만 사용 (227MB JSON 파일 불필요)
-    - 데이터에 없는 모델명/기관명/인증번호는 생성하지 않음
-    - 보조 참고자료 원칙 엄수 — 인증 가능 여부 확정 표현 금지
+    kc_agg (main.py 시작 시 집계된 compact index) 기반으로 법정 품목명 후보를 검색.
+    데이터 없는 모델명·인증번호·기관명은 생성하지 않음.
+    KC 인증정보는 보조 참고자료 — 인증 가능 여부 확정 표현 금지.
     """
-    rag_chunks: List[Any] = (app_data or {}).get("rag_chunk_all") or []
+    kc_agg: Dict[str, Any] = (app_data or {}).get("kc_agg") or {}
 
     empty = KcCertificationSummary(
         similar_cert_count=0,
@@ -109,19 +148,8 @@ def get_kc_summary(
         note=_NOTE_NO_DATA,
     )
 
-    if not rag_chunks:
-        logger.info("Phase 6: rag_chunk_all 없음 → 빈 KC 요약 반환")
-        return empty, []
-
-    # KC 청크 인덱스 구축 (product_name → chunk)
-    try:
-        kc_index = _build_kc_index(rag_chunks)
-    except Exception as e:
-        logger.warning("Phase 6 KC 인덱스 구축 실패: %s", e)
-        return empty, []
-
-    if not kc_index:
-        logger.info("Phase 6: KC_CERTIFICATION_SUMMARY 청크 없음")
+    if not kc_agg:
+        logger.info("Phase 6: kc_agg 없음 → 빈 KC 요약 반환")
         return empty, []
 
     target_names = _pick_target_names(candidates)
@@ -129,48 +157,51 @@ def get_kc_summary(
         logger.info("Phase 6: 검색 대상 법정 품목명 없음")
         return empty, []
 
-    # 첫 번째 타겟 품목으로 청크 조회 (KC 청크는 품목별 1개)
-    chunk = None
-    matched_name = ""
+    # 첫 번째로 매칭되는 KC 카테고리 사용
+    matched_kc_key: Optional[str] = None
+    matched_legal_name: str = ""
     for name in target_names:
-        if name in kc_index:
-            chunk = kc_index[name]
-            matched_name = name
+        key = _find_kc_match(name, kc_agg)
+        if key:
+            matched_kc_key = key
+            matched_legal_name = name
             break
 
-    if chunk is None:
-        logger.info("Phase 6: '%s' 관련 KC 청크 없음", ", ".join(target_names))
+    if matched_kc_key is None:
+        logger.info("Phase 6: '%s' 관련 KC 카테고리 없음", ", ".join(target_names))
         return empty, []
 
-    logger.info("Phase 6: KC 청크 매칭 '%s' (%s)", matched_name, chunk.get("chunk_id"))
+    entry = kc_agg[matched_kc_key]
+    cert_count: int = entry.get("total") or 0
+    top_organs: List[str] = entry.get("top_organs") or []
+    samples: List[Dict[str, Any]] = entry.get("samples") or []
 
-    meta = chunk.get("metadata") or {}
-    cert_count: int = meta.get("kc_cert_count") or 0
-    top_organs: List[str] = meta.get("top_cert_organ_names") or []
-    sample_certs: List[Dict[str, Any]] = meta.get("sample_certifications") or []
+    logger.info(
+        "Phase 6: KC 매칭 법정품목='%s' → KC카테고리='%s' / %d건",
+        matched_legal_name, matched_kc_key, cert_count,
+    )
 
-    # representative_models: 모델명 있는 항목 우선 선택
+    # representative_models: 모델명 있는 항목 우선
     rep_models: List[str] = []
-    seen_models: set[str] = set()
-    for cert in sample_certs:
+    seen_models: set = set()
+    for cert in samples:
         if not isinstance(cert, dict):
             continue
-        model = _safe_str(cert.get("model_name"))
-        if not model or model in seen_models:
+        model = _safe_str(cert.get("modelName"))
+        if model and model in seen_models:
             continue
-        formatted = _format_model(cert)
+        formatted = _format_sample(cert)
         if formatted:
-            seen_models.add(model)
+            if model:
+                seen_models.add(model)
             rep_models.append(formatted)
         if len(rep_models) >= _MAX_MODELS:
             break
 
     # source_refs
-    chunk_id = _safe_str(chunk.get("chunk_id"))
-    source_refs: List[str] = []
-    if chunk_id:
-        source_refs.append(f"kc_certification_summary:{chunk_id}")
-    source_refs.append(f"kc_certification_summary:{matched_name}:{cert_count}건")
+    source_refs: List[str] = [
+        f"kc_certification:{matched_kc_key}:{cert_count}건",
+    ]
 
     return (
         KcCertificationSummary(

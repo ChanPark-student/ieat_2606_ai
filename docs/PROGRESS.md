@@ -21,7 +21,7 @@
 | Phase 3 | 인증유형 및 안전기준 조회 | ✅ 완료 |
 | Phase 4 | 기관 및 절차 안내 | ✅ 완료 |
 | Phase 5 | 국내 리콜 사유 검색 | ✅ 완료 |
-| Phase 6 | KC 유사 인증사례 | ⏳ 미구현 |
+| Phase 6 | KC 유사 인증사례 | ✅ 완료 |
 | Phase 7 | LLM 보고서 생성 | ⏳ 미구현 |
 
 ---
@@ -318,13 +318,83 @@ source_refs         : 13개 (Phase 3+4+5 통합)
 
 ---
 
+### Phase 6 — KC 유사 인증사례 검색
+
+**수정 파일**: `app/main.py`, `app/services/kc_certification_service.py`
+
+#### 데이터 파일
+
+| 파일 | 레코드 수 | 비고 |
+|---|---|---|
+| `data/safety_json/kc_certification.json` | 353,861건 (226MB) | Git 커밋 제외 (.gitignore). 시작 시 집계 후 raw 폐기 |
+
+#### 핵심 설계: 시작 시 집계 인덱스 구축 (compact index 패턴)
+
+226MB 파일을 통째로 메모리에 유지하는 대신, 시작 시 1회 로드 후 `categoryName[2]` 기준으로 집계해 compact index만 유지.
+
+```
+kc_agg = {
+  "완구": { total: 30851, valid: 457, top_organs: ["KCL"], samples: [...10개] },
+  "학용품": { total: 6953, valid: 91, ... },
+  ...  # 41개 카테고리
+}
+```
+
+- 로드 + 집계 시간: ~3.2초 (226MB JSON)
+- 집계 후 raw 즉시 del → 메모리 대부분 해제
+- 파일 없으면 `kc_agg = {}` + warning log → 서버 정상 기동
+
+#### main.py 변경
+
+- `_build_kc_agg(raw_list)` 함수 추가 (lifespan 내부)
+- `domestic_recall.json`은 기존대로 전체 로드 (11MB, recall_service에서 직접 사용)
+- `kc_certification.json`은 집계 후 raw 폐기 → `app_data["kc_agg"]`에 저장
+
+#### kc_certification_service.py — 3단계 법정 품목명 매칭
+
+| 단계 | 방법 |
+|---|---|
+| 1. 정확 일치 | `legal_name in kc_agg` |
+| 2. substring 포함 | `key in legal_name` or `legal_name in key` |
+| 3. 정규화 후 비교 | "어린이용/유아용/아동용" 접두사 제거 후 재비교 (예: `아동용 섬유제품` → `유아용 섬유제품`) |
+
+#### KC 인증 데이터 필드 활용
+
+| 필드 | 활용 |
+|---|---|
+| `categoryName` | `> ` 기준 3번째 부분 = 법정 품목명 유사 카테고리 |
+| `certOrganName` | 인증기관명 (`(약칭)` 추출 → top_organs) |
+| `certState` | `적합`만 representative_models 샘플링 |
+| `certNum` | 인증번호 |
+| `certDate` | 인증일자 (`YYYYMMDD` → `YYYY-MM-DD` 포맷) |
+| `modelName` | 모델명 |
+| `importDiv` | 수입/제조 구분 |
+
+#### 원칙 준수
+
+- KC 인증정보는 보조 참고자료 (인증 가능 여부 확정 금지)
+- 데이터에 없는 모델명·기관명·인증번호 생성 없음
+- `note` 필드에 항상 보조 근거 안내 문구 포함
+
+#### 테스트 케이스별 결과
+
+| 케이스 | KC 매칭 카테고리 | KC count | top_organs |
+|---|---|---|---|
+| A 어린이용 책가방 | 유아용 섬유제품 (정규화 매칭) | 2,094건 | KCL |
+| B 장난감 자동차 | 완구 (정확 매칭) | 30,851건 | KCL |
+| C 어린이 색연필 세트 | 학용품 (정확 매칭) | 6,953건 | KCL |
+| D 유아용 내의 | 유아용 섬유제품 (정확 매칭) | 2,094건 | KCL |
+| E 정체불명 | 매칭 없음 | 0건 | — |
+
+---
+
 ## 현재 미구현 / 다음 단계 후보
 
 | 단계 | 항목 | 관련 파일 |
 |---|---|---|
-| Phase 6 | KC 유사 인증사례 | `safety_json/kc_certification.json` (227MB, 경량 인덱스 필요) |
 | Phase 7 | LLM 보고서 생성 | `app/llm/hf_generator.py` + `app/llm/prompts.py` |
 | 검색 고도화 | BM25 검색 | `app/search/bm25_search.py` |
+| 리콜 검색 확장 | unmapped 2,935건 BM25/임베딩 검색 | `app/services/recall_service.py` |
 
 ---
 
