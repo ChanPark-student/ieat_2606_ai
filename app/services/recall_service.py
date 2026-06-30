@@ -41,10 +41,9 @@ def _pick_target_names(candidates: List[LegalProductCandidate]) -> List[str]:
         return list(dict.fromkeys(
             _safe_str(c.legal_product_name) for c in confirmed_or_candidate
         ))
-    # NEEDS_CONFIRMATION만 있는 경우: 가장 높은 후보 1개만 (과도한 union 방지)
-    top = max(candidates, key=lambda c: c.confidence_score)
-    name = _safe_str(top.legal_product_name)
-    return [name] if name else []
+    # CONFIRMED/CANDIDATE가 하나도 없으면(전부 NEEDS_CONFIRMATION) 품목군 미확정.
+    # 0.06 같은 약한 추정으로 리콜 사례를 노출하면 과확정이므로 빈 결과 반환 (E 케이스).
+    return []
 
 
 def _filter_recalls(
@@ -92,12 +91,13 @@ def _description_score(record: Dict[str, Any]) -> int:
 
 def _build_representative_cases(
     records: List[Dict[str, Any]],
-    bm25_scores: Optional[Dict[str, float]] = None,
+    bm25_scores: Optional[Dict[int, float]] = None,
 ) -> Tuple[List[str], List[Any]]:
     """대표 리콜 사례를 한 줄 문자열로 구성.
 
     - recallProductName 기준 dedup: 설명이 가장 풍부한 레코드 선택
     - bm25_scores 제공 시: BM25 점수 우선 정렬, description_score 보조
+      (키는 id(record) — recallUid 누락/중복 시에도 안정적)
     - 없으면: description_score 내림차순 정렬
 
     Returns:
@@ -113,9 +113,13 @@ def _build_representative_cases(
             best_by_name[product] = r
 
     if bm25_scores:
-        def _sort_key(r: Dict[str, Any]) -> Tuple[float, int]:
-            uid = str(r.get("recallUid", ""))
-            return (-bm25_scores.get(uid, 0.0), -_description_score(r))
+        # 설명이 있는 사례를 우선(대표 사례는 위험 패턴을 보여야 함),
+        # 그 안에서 BM25 관련도 → description 충실도 순.
+        # '상세 사유 없음' 사례는 설명 있는 사례가 부족할 때만 노출.
+        def _sort_key(r: Dict[str, Any]) -> Tuple[int, float, int]:
+            desc = _description_score(r)
+            has_desc = 1 if desc > 0 else 0
+            return (-has_desc, -bm25_scores.get(id(r), 0.0), -desc)
         ranked = sorted(best_by_name.values(), key=_sort_key)
     else:
         ranked = sorted(best_by_name.values(), key=_description_score, reverse=True)
@@ -199,6 +203,32 @@ def _build_prevention_points(
     return result
 
 
+def _should_allow_supplemental(
+    candidates: List[LegalProductCandidate],
+    cert_diagnosis: CertificationDiagnosis,
+) -> bool:
+    """BM25 보조 검색 허용 여부 (E 케이스 과확정 방지).
+
+    품목군이 충분히 확정된 경우에만 보조 검색을 허용한다:
+    - 최상위 후보가 CONFIRMED, 또는 CANDIDATE이면서 score>=0.5
+    - 그리고 인증유형이 '확인 전'이 아님
+
+    정체불명 입력(CONFIRMED 없음 / cert '확인 전')에서는 임의 리콜 사례를
+    노출하지 않는다.
+    """
+    if not candidates:
+        return False
+    cert_type = (cert_diagnosis.certification_type or "").strip()
+    if cert_type in ("", "확인 전", "미정"):
+        return False
+    best = max(candidates, key=lambda c: c.confidence_score)
+    if best.confidence_level == "CONFIRMED":
+        return True
+    if best.confidence_level == "CANDIDATE" and best.confidence_score >= 0.5:
+        return True
+    return False
+
+
 def get_recall_summary(
     candidates: List[LegalProductCandidate],
     cert_diagnosis: CertificationDiagnosis,
@@ -248,27 +278,35 @@ def get_recall_summary(
         logger.info("Phase 5: '%s' 관련 리콜 레코드 없음", ", ".join(target_names))
 
         supplemental_cases: List[str] = []
-        if query_text and bm25_idx and bm25_idx.available:
+        allow_supp = _should_allow_supplemental(candidates, cert_diagnosis)
+        if not allow_supp:
+            logger.info(
+                "Phase 5: 품목군 미확정 → BM25 보조 검색 차단 (과확정 방지)"
+            )
+        elif query_text and bm25_idx and getattr(bm25_idx, "available", False):
             try:
                 exclude = set(n.lower() for n in target_names if n)
                 bm25_results = bm25_idx.search_top_k(
                     query_text, top_k=20, exclude_legal_names=exclude
                 )
                 if bm25_results:
-                    # 최고점 30% 미만 제거
+                    # 최고점이 0 이하면 의미 없음 / 최고점 대비 30% 미만 제거
                     max_score = bm25_results[0][1]
-                    threshold = max_score * 0.3
-                    filtered = [(r, s) for r, s in bm25_results if s >= threshold]
-                    sup_records = [r for r, _ in filtered]
-                    sup_scores = {
-                        str(r.get("recallUid", "")): s for r, s in filtered
-                    }
-                    sup_cases, _ = _build_representative_cases(sup_records, sup_scores)
-                    supplemental_cases = sup_cases
-                    logger.info(
-                        "Phase 5 BM25 보조 검색: %d건 (threshold=%.2f)",
-                        len(supplemental_cases), threshold,
-                    )
+                    if max_score > 0:
+                        threshold = max_score * 0.3
+                        filtered = [
+                            (r, s) for r, s in bm25_results if s >= threshold
+                        ][:_MAX_CASES]
+                        sup_records = [r for r, _ in filtered]
+                        sup_scores = {id(r): s for r, s in filtered}
+                        sup_cases, _ = _build_representative_cases(
+                            sup_records, sup_scores
+                        )
+                        supplemental_cases = sup_cases
+                        logger.info(
+                            "Phase 5 BM25 보조 검색: %d건 (threshold=%.2f)",
+                            len(supplemental_cases), threshold,
+                        )
             except Exception as e:
                 logger.warning("Phase 5 BM25 보조 검색 실패: %s", e)
 
@@ -290,9 +328,9 @@ def get_recall_summary(
     # ── reason_keywords 집계 ──────────────────────────────────────────────
     top_reasons = _aggregate_reason_keywords(matched)
 
-    # ── BM25 점수로 대표 사례 정렬 ────────────────────────────────────────
-    bm25_scores: Optional[Dict[str, float]] = None
-    if query_text and bm25_idx and bm25_idx.available:
+    # ── BM25 점수로 대표 사례 정렬 (exact match subset, 품목군 이미 확정) ──
+    bm25_scores: Optional[Dict[int, float]] = None
+    if query_text and bm25_idx and getattr(bm25_idx, "available", False):
         try:
             bm25_scores = bm25_idx.score_records(query_text, matched)
         except Exception as e:
