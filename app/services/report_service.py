@@ -30,6 +30,30 @@ _CONFIDENCE_DESC = {
     "NEEDS_CONFIRMATION": "입력 정보만으로는 품목군을 확정하기 어렵습니다.",
 }
 
+# ── 체크리스트 우선순위용 소재/품목 키워드 그룹 ──────────────────────────────
+# 섬유/원단 계열 — 봉제완구·섬유제품의 소재 신호로 사용 (diagnosis_service의
+# RAG 질의 정규화에서도 동일 그룹을 재사용한다)
+FABRIC_MATERIAL_TOKENS: List[str] = [
+    "극세사", "원단", "솜", "실", "봉제", "섬유", "직물", "패브릭", "천",
+    "면", "폴리", "폴리에스터", "나일론", "아크릴", "가죽", "스웨이드",
+    "플리스", "털", "퍼", "충전재", "안감", "겉감",
+]
+
+# 인형/봉제완구 계열 — product_name·user_query에서 품목 신호로 사용
+PLUSH_TOY_TOKENS: List[str] = [
+    "인형", "곰인형", "봉제인형", "봉제완구", "캐릭터인형",
+    "plush", "doll", "stuffed", "teddy", "bear",
+]
+
+# 장식/부속품 계열 — 작은 부품 탈락 위험 신호
+_ACCESSORY_TOKENS = ["단추", "눈알", "장식", "부속품", "마개"]
+
+# 끈/코드/리본/고리 관련 항목은 입력에 이 신호가 있을 때만 우선 노출
+_STRAP_SIGNAL_TOKENS = ["끈", "코드", "리본", "고리", "스트랩", "줄"]
+
+# 발열/전기 신호 — 배터리 신호가 없어도 이 토큰이 있으면 온열 항목 유지
+_HEAT_SIGNAL_TOKENS = ["온열", "발열", "히터", "전열", "전기"]
+
 
 def _dedup_checklist(checklist: List[str], prevention_points: List[str]) -> List[str]:
     """체크리스트에서 예방 포인트와 동일하거나 포함 관계인 항목을 제거해 중복 방지."""
@@ -64,19 +88,23 @@ def _prioritize_checklist(
 ) -> List[str]:
     """입력 제품 특성에 따라 체크리스트 항목 우선순위 정렬.
 
-    원본 데이터는 유지하며 표시 순서만 조정.
+    원본 데이터는 유지하며 표시 순서만 조정(삭제하지 않음).
     점수가 높을수록 앞에, 낮을수록 뒤에 표시된다.
     """
     material = (input_summary.get("material_text") or "").lower()
     power_type = (input_summary.get("power_type") or "").lower()
     battery_included = bool(input_summary.get("battery_included", False))
     product_name = (input_summary.get("product_name") or "").lower()
+    user_query = (input_summary.get("user_query") or "").lower()
+    text_all = f"{product_name} {user_query}"
 
-    # 우선 키워드: 입력 조건에서 동적으로 결정
     priority_kw: List[str] = []
     depriority_kw: List[str] = []
 
-    if battery_included or "건전지" in power_type or "배터리" in power_type or "충전" in power_type:
+    has_battery_signal = (
+        battery_included or "건전지" in power_type or "배터리" in power_type or "충전" in power_type
+    )
+    if has_battery_signal:
         priority_kw += ["배터리", "전지", "충전", "전원"]
 
     if "플라스틱" in material or "합성수지" in material or "pvc" in material or "abs" in material:
@@ -88,11 +116,52 @@ def _prioritize_checklist(
     if "완구" in legal_name or "장난감" in product_name:
         priority_kw += ["작은 부품", "날카로운", "자석", "기계적", "작동"]
 
-    # 섬유/가죽/의류/온열은 관련 제품이 아니면 후순위
-    is_fabric_product = any(k in legal_name for k in ["섬유", "의류"]) or \
-                        any(k in material for k in ["섬유", "면", "폴리", "나일론", "가죽"])
+    # 인형/봉제완구 판별: 품목명·문의내용에 인형류 신호 + 소재에 섬유·충전재류 신호가
+    # 함께 있을 때만 인정 (섬유 신호만으로 오탐하지 않도록 함께 요구)
+    has_plush_signal = any(t in text_all for t in PLUSH_TOY_TOKENS)
+    has_fabric_material = any(t in material for t in FABRIC_MATERIAL_TOKENS)
+    is_plush_toy = has_plush_signal and has_fabric_material
+
+    if is_plush_toy:
+        # 인형/봉제완구 특화 우선순위: 봉제선·충전재 노출, 장식·부속품(작은 부품),
+        # 원단·염색·프린팅 유해물질, 폼알데하이드, 아릴아민/아조염료,
+        # 코팅·단추 부위 납/카드뮴/가소제, 표시사항류를 상위로 끌어올림
+        priority_kw += [
+            "봉제", "충전재", "솜", "작은 부품",
+            *_ACCESSORY_TOKENS,
+            "염색", "프린팅", "유해원소",
+            "폼알데하이드",
+            "아릴아민", "아조염료",
+            "납", "카드뮴",
+            "가소제", "프탈레이트",
+            "표시사항", "관련 표시", "주의사항", "사용연령", "재질", "제조자", "수입자",
+        ]
+
+    # 섬유(원단 포함)/가죽 관련 항목은 실제 섬유 소재(또는 인형/봉제완구)일 때만 유지,
+    # 그렇지 않으면 후순위
+    is_fabric_product = (
+        any(k in legal_name for k in ["섬유", "의류"])
+        or has_fabric_material
+        or is_plush_toy
+    )
     if not is_fabric_product:
-        depriority_kw += ["섬유", "가죽", "아릴아민", "아조염료", "온열"]
+        depriority_kw += ["섬유", "가죽", "아릴아민", "아조염료", "폼알데하이드"]
+
+    # 온열/발열: 배터리·발열 신호가 전혀 없으면 후순위 (완전히 제거하지는 않음)
+    has_heat_signal = any(t in material or t in power_type for t in _HEAT_SIGNAL_TOKENS)
+    if not has_battery_signal and not has_heat_signal:
+        depriority_kw += _HEAT_SIGNAL_TOKENS
+
+    # 끈/코드/리본/고리/스트랩/줄: 입력에 실제 신호가 있을 때만 우선 노출,
+    # 없으면 후순위 (완전히 제거하지는 않음)
+    has_strap_signal = any(t in text_all or t in material for t in _STRAP_SIGNAL_TOKENS)
+    if has_strap_signal:
+        priority_kw += _STRAP_SIGNAL_TOKENS
+    else:
+        depriority_kw += _STRAP_SIGNAL_TOKENS
+
+    priority_kw = list(dict.fromkeys(priority_kw))
+    depriority_kw = list(dict.fromkeys(depriority_kw))
 
     def _score(item: str) -> int:
         item_l = item.lower()
@@ -146,9 +215,13 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
         "import_or_manufacture": "수입/제조",
     }
     for k, v in response.input_summary.items():
+        label = label_map.get(k, k)
+        if k == "battery_included":
+            # 배터리 포함 여부는 False("아니오")도 의미 있는 정보이므로 항상 표시
+            md += f"- **{label}**: {'예' if v else '아니오'}\n"
+            continue
         if v is None or v == "" or v == [] or v is False:
             continue
-        label = label_map.get(k, k)
         display_v = "예" if v is True else v
         md += f"- **{label}**: {display_v}\n"
     md += "\n"

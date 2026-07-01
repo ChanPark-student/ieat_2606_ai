@@ -69,6 +69,19 @@ CASES = [
             "import_or_manufacture": "수입",
         },
     ),
+    (
+        "04_doll_demo.md",
+        "벨리곰 인형 (봉제완구/섬유 소재 체크리스트 우선순위 검증)",
+        {
+            "product_name": "벨리곰 인형",
+            "user_query": "핑크색 곰인형입니다.",
+            "target_age": "5세부터 15세까지",
+            "material_text": "극세사 원단, 솜, 실, 플라스틱 단추",
+            "power_type": "없음",
+            "battery_included": False,
+            "import_or_manufacture": "제조",
+        },
+    ),
 ]
 
 

@@ -79,7 +79,7 @@
 
 ## 8. 검색 근거 요약 (RAG / source_refs)
 
-  - used_rag_chunk_ids (8): RAG-CHILD-A3-거, RAG-CHECK-00174, RAG-CHECK-00177, RAG-CHECK-00171, INST_RAG_0036, RAG-DOC-00022, KC-SUM-0032, INST_RAG_0040
+  - used_rag_chunk_ids (8): RAG-CHILD-A3-거, RAG-CHECK-00177, RAG-CHECK-00171, RAG-CHECK-00174, INST_RAG_0036, RAG-DOC-00022, KC-SUM-0032, INST_RAG_0040
   - source_refs (23건, 일부):
     - certification_annex_rule:CHILD-A3-거
     - [별표 3] 공급자적합성확인대상어린이제품의 종류 및 적용 안전기준(제2조제3항 관련)(어린이제품 안전 특별법 시행규칙).pdf
@@ -105,6 +105,7 @@
 - **문의 내용**: 초등학생용 책가방을 수입합니다.
 - **대상 연령**: 7세
 - **소재**: 폴리에스터, 나일론
+- **배터리 포함**: 아니오
 - **수입/제조**: 수입
 
 ## 2. 법정 품목명 후보

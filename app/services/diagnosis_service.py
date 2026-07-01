@@ -10,7 +10,11 @@ from app.schemas.response import (
     RecallReasonSummary,
     KcCertificationSummary,
 )
-from app.services.report_service import generate_markdown_report
+from app.services.report_service import (
+    generate_markdown_report,
+    FABRIC_MATERIAL_TOKENS,
+    PLUSH_TOY_TOKENS,
+)
 from app.services.category_matcher import match_category
 from app.services.certification_service import diagnose_certification
 from app.services.institution_service import get_institution_guidance
@@ -20,6 +24,28 @@ from app.search.rag_retriever import collect_refs
 from app.search.text_utils import tokenize, meaningful_tokens
 
 logger = logging.getLogger(__name__)
+
+
+def _normalize_material_tags(material_text: str, product_name: str, user_query: str) -> list:
+    """소재·제품 원문에서 정규화된 검색 태그 추출 (RAG 질의 보강용).
+
+    예: "극세사 원단, 솜, 실" → ["섬유", "원단", "봉제", "충전재", "봉제완구"]
+    report_service._prioritize_checklist와 동일한 키워드 그룹을 사용해
+    체크리스트 우선순위 판단과 RAG 검색 신호를 일치시킨다.
+    """
+    text = f"{material_text} {product_name} {user_query}".lower()
+    material = (material_text or "").lower()
+
+    tags: list = []
+    has_fabric = any(t in material for t in FABRIC_MATERIAL_TOKENS)
+    has_plush = any(t in text for t in PLUSH_TOY_TOKENS)
+
+    if has_fabric:
+        tags += ["섬유", "원단", "봉제", "충전재"]
+    if has_fabric and has_plush:
+        tags.append("봉제완구")
+
+    return list(dict.fromkeys(tags))
 
 def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> DiagnosisResponse:
     # 7. 절대 하드코딩 판단을 하지 말고, 현재는 입력값 요약과 빈 후보/빈 요약을 반환하는 baseline
@@ -130,6 +156,9 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
     rag = (app_data or {}).get("rag_retriever")
     if rag is not None and getattr(rag, "available", False):
         try:
+            _material_tags = _normalize_material_tags(
+                request.material_text or "", request.product_name or "", request.user_query or ""
+            )
             _query_parts = [
                 request.product_name or "",
                 request.user_query or "",
@@ -138,6 +167,7 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
                 request.power_type or "",
                 "배터리 포함" if request.battery_included else "",
                 request.import_or_manufacture or "",
+                " ".join(_material_tags),
             ]
             # 품목이 확정된 경우에만 rule 결과를 query에 추가 (불확실 입력 과확정 방지)
             if _allow_category_specific:
@@ -156,6 +186,7 @@ def run_diagnosis(request: DiagnosisRequest, app_data: Dict[str, Any]) -> Diagno
                     request.material_text or "",
                     request.power_type or "",
                     "배터리" if request.battery_included else "",
+                    " ".join(_material_tags),
                 ])))
             )
 
