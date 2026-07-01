@@ -26,11 +26,11 @@ CASES = {
     },
     "B_toy_car": {
         "body": {"product_name": "장난감 자동차", "user_query": "5세 어린이가 사용하는 건전지 장난감 자동차를 수입하려고 합니다.", "target_age": "5세", "material_text": "플라스틱, 금속 나사", "power_type": "건전지", "battery_included": True, "import_or_manufacture": "수입"},
-        "expect": {"top_legal": "완구", "cert": "안전확인", "confirmed": True, "recall_count": 224, "rag_nonempty": True},
+        "expect": {"top_legal": "완구", "cert": "안전확인", "confirmed": True, "recall_count": 224, "rag_nonempty": True, "kc_relevant": True},
     },
     "C_pencil": {
         "body": {"product_name": "어린이 색연필 세트", "user_query": "초등학생이 사용하는 24색 색연필 세트를 출시하려고 합니다.", "target_age": "8세", "material_text": "목재, 안료, 종이 포장재", "power_type": "없음", "battery_included": False, "import_or_manufacture": "제조"},
-        "expect": {"top_legal": "학용품", "cert": "안전확인", "confirmed": True, "rag_nonempty": True},
+        "expect": {"top_legal": "학용품", "cert": "안전확인", "confirmed": True, "rag_nonempty": True, "kc_relevant": True},
     },
     "D_underwear": {
         "body": {"product_name": "유아용 내의", "user_query": "12개월 아기가 입는 면 소재 내의를 제조해서 판매하려고 합니다.", "target_age": "12개월", "material_text": "면 100%, 봉제 원단, 고무 밴드", "power_type": "없음", "battery_included": False, "import_or_manufacture": "제조"},
@@ -44,8 +44,8 @@ CASES = {
         "body": {"product_name": "벨리곰 인형", "user_query": "핑크색 곰인형입니다.", "target_age": "5세부터 15세까지", "material_text": "극세사 원단, 솜, 실, 플라스틱 단추", "power_type": "없음", "battery_included": False, "import_or_manufacture": "제조"},
         "expect": {
             "top_legal": "완구", "cert": "안전확인", "confirmed": True, "recall_count": 224, "rag_nonempty": True,
-            "checklist_heat_low": True, "checklist_strap_low": True, "checklist_fabric_hazard_present": True,
-            "battery_shown_no": True,
+            "checklist_heat_absent": True, "checklist_strap_absent": True, "checklist_fabric_hazard_present": True,
+            "battery_shown_no": True, "kc_relevant": True,
         },
     },
 }
@@ -116,19 +116,15 @@ def main() -> int:
             checklist_lines = [l for l in checklist_block.split("\n") if l.strip().startswith("- [ ]")]
             n = len(checklist_lines)
 
-            if exp.get("checklist_heat_low") and n:
-                heat_idx = next((i for i, l in enumerate(checklist_lines) if "온열" in l), None)
+            if exp.get("checklist_heat_absent"):
                 ok &= check(
-                    "온열 항목이 하위 절반 이내 (제거되지 않되 후순위)",
-                    heat_idx is not None and heat_idx >= n // 2,
-                    f"idx={heat_idx}/{n}",
+                    "온열 항목이 체크리스트에서 제외됨 (배터리/발열 신호 없음)",
+                    not any("온열" in l for l in checklist_lines),
                 )
-            if exp.get("checklist_strap_low") and n:
-                strap_idx = next((i for i, l in enumerate(checklist_lines) if "끈과 코드" in l), None)
+            if exp.get("checklist_strap_absent"):
                 ok &= check(
-                    "끈/코드 항목이 최하위 (입력에 관련 신호 없음)",
-                    strap_idx is not None and strap_idx == n - 1,
-                    f"idx={strap_idx}/{n}",
+                    "끈/코드 항목이 체크리스트에서 제외됨 (입력에 관련 신호 없음)",
+                    not any("끈과 코드" in l for l in checklist_lines),
                 )
             if exp.get("checklist_fabric_hazard_present"):
                 has_formaldehyde = any("폼알데하이드" in l for l in checklist_lines)
@@ -139,8 +135,16 @@ def main() -> int:
                 )
             if exp.get("battery_shown_no"):
                 ok &= check("§1에 배터리 포함: 아니오 명시", "배터리 포함**: 아니오" in md)
+            if exp.get("kc_relevant"):
+                i6 = md.find("## 6.")
+                i7b = md.find("## 7.")
+                kc_block = md[i6:i7b] if i6 >= 0 and i7b >= 0 else ""
+                ok &= check(
+                    "KC 대표사례 관련도 순 정렬 배너 표시",
+                    "유사한 키워드가 포함된 사례 우선 표시" in kc_block,
+                )
 
-            if "checklist_heat_low" in exp or "checklist_strap_low" in exp:
+            if "checklist_heat_absent" in exp or "checklist_strap_absent" in exp:
                 print(f"   (§7 체크리스트 {n}개 순서: " + " | ".join(
                     l.strip()[6:36] for l in checklist_lines) + ")")
 

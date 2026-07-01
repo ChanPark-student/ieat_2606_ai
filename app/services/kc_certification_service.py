@@ -27,9 +27,73 @@ _NOTE_SELF_CONFORMITY = (
 
 _LEVEL_PRIORITY = {"CONFIRMED": 0, "CANDIDATE": 1, "NEEDS_CONFIRMATION": 2}
 
+# 품목별 키워드 그룹 — 입력 신호와 KC 샘플 모델명/제품명 사이의 관련도 판단에 사용.
+# KC count·법정 품목명 판단에는 사용하지 않으며, representative_models 정렬에만 반영한다.
+PRODUCT_KEYWORD_GROUPS: Dict[str, List[str]] = {
+    "doll": [
+        "인형", "봉제인형", "곰인형", "캐릭터인형", "캐릭터",
+        "plush", "doll", "stuffed", "teddy", "bear",
+        "봉제", "솜", "극세사",
+    ],
+    "car": [
+        "자동차", "미니카", "전동", "건전지", "바퀴",
+        "rc", "car", "vehicle",
+    ],
+    "pencil": [
+        "색연필", "연필", "크레용", "필기구", "학용품",
+    ],
+}
+
 
 def _safe_str(val: Any) -> str:
     return str(val).strip() if val is not None else ""
+
+
+def _matched_groups(text: str) -> List[str]:
+    """입력 텍스트가 어떤 품목 키워드 그룹에 해당하는지 판별."""
+    if not text:
+        return []
+    text_l = text.lower()
+    return [
+        g for g, kws in PRODUCT_KEYWORD_GROUPS.items()
+        if any(kw.lower() in text_l for kw in kws)
+    ]
+
+
+def _group_relevance(sample: Dict[str, Any], groups: List[str]) -> int:
+    """sample 모델명/제품명이 매칭된 그룹의 키워드를 얼마나 포함하는지 점수화."""
+    if not groups:
+        return 0
+    model = (sample.get("modelName") or "").lower()
+    product = (sample.get("productName") or "").lower()
+    combined = model + " " + product
+    score = 0
+    for g in groups:
+        for kw in PRODUCT_KEYWORD_GROUPS[g]:
+            if kw.lower() in combined:
+                score += 1
+    return score
+
+
+def has_relevant_representative_model(query_text: str, representative_models: List[str]) -> bool:
+    """representative_models 중 입력 제품과 실제로 관련 있는 항목이 있는지 판단.
+
+    원문 단어 겹침 + 품목 키워드 그룹 겹침을 모두 확인 — report_service의
+    §6 안내 문구(관련도 순 정렬 vs 품목군 전체 기준) 선택에 사용.
+    """
+    if not representative_models or not query_text:
+        return False
+    query_words = {w for w in query_text.lower().split() if len(w) > 1}
+    groups = _matched_groups(query_text)
+    for m in representative_models:
+        m_l = m.lower()
+        if any(w in m_l for w in query_words):
+            return True
+        if groups and any(
+            kw.lower() in m_l for g in groups for kw in PRODUCT_KEYWORD_GROUPS[g]
+        ):
+            return True
+    return False
 
 
 def _find_kc_match(legal_name: str, kc_agg: Dict[str, Any]) -> Optional[str]:
@@ -191,12 +255,19 @@ def get_kc_summary(
         matched_legal_name, matched_kc_key, cert_count,
     )
 
-    # query 키워드로 samples 정렬: 입력 제품과 연관도 높은 사례를 먼저 표시
+    # query 키워드로 samples 정렬: 입력 제품과 연관도 높은 사례를 먼저 표시.
+    # 품목 키워드 그룹(인형/자동차/색연필 등) 매칭을 1차 기준으로, 원문 단어
+    # 겹침을 2차 기준으로 사용 — 그룹 매칭이 원문 표현 차이(예: "곰인형" 입력이
+    # "테디베어" 샘플과 다른 표현)에도 관련 사례를 찾을 수 있게 한다.
     query_words = {w for w in query_text.lower().split() if len(w) > 1} if query_text else set()
-    if query_words:
+    matched_groups = _matched_groups(query_text) if query_text else []
+    if query_words or matched_groups:
         samples_sorted = sorted(
             (s for s in samples if isinstance(s, dict)),
-            key=lambda s: _sample_relevance(s, query_words),
+            key=lambda s: (
+                _group_relevance(s, matched_groups),
+                _sample_relevance(s, query_words),
+            ),
             reverse=True,
         )
     else:

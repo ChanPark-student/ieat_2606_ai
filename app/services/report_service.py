@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import List
 
 from app.schemas.response import DiagnosisResponse
+from app.services.kc_certification_service import has_relevant_representative_model
 
 # 인증유형별 한 줄 설명 (일반 제도 지식 기반 — 특정 제품 데이터 아님)
 _CERT_TYPE_DESC = {
@@ -102,7 +103,8 @@ def _prioritize_checklist(
     depriority_kw: List[str] = []
 
     has_battery_signal = (
-        battery_included or "건전지" in power_type or "배터리" in power_type or "충전" in power_type
+        battery_included
+        or any(t in power_type for t in ["건전지", "배터리", "충전", "usb", "전기"])
     )
     if has_battery_signal:
         priority_kw += ["배터리", "전지", "충전", "전원"]
@@ -147,21 +149,39 @@ def _prioritize_checklist(
     if not is_fabric_product:
         depriority_kw += ["섬유", "가죽", "아릴아민", "아조염료", "폼알데하이드"]
 
-    # 온열/발열: 배터리·발열 신호가 전혀 없으면 후순위 (완전히 제거하지는 않음)
+    # 온열/발열: 배터리·발열 신호가 있을 때만 표시 대상으로 유지
     has_heat_signal = any(t in material or t in power_type for t in _HEAT_SIGNAL_TOKENS)
-    if not has_battery_signal and not has_heat_signal:
-        depriority_kw += _HEAT_SIGNAL_TOKENS
+    show_heat_items = has_battery_signal or has_heat_signal
+    if show_heat_items:
+        priority_kw += _HEAT_SIGNAL_TOKENS if has_heat_signal else []
 
-    # 끈/코드/리본/고리/스트랩/줄: 입력에 실제 신호가 있을 때만 우선 노출,
-    # 없으면 후순위 (완전히 제거하지는 않음)
+    # 끈/코드/리본/고리/스트랩/줄: 입력에 실제 신호가 있을 때만 표시 대상으로 유지
     has_strap_signal = any(t in text_all or t in material for t in _STRAP_SIGNAL_TOKENS)
     if has_strap_signal:
         priority_kw += _STRAP_SIGNAL_TOKENS
-    else:
-        depriority_kw += _STRAP_SIGNAL_TOKENS
 
     priority_kw = list(dict.fromkeys(priority_kw))
     depriority_kw = list(dict.fromkeys(depriority_kw))
+
+    # 하드 필터: 트리거 신호가 없는 온열/끈-코드류 항목은 화면에서 숨김.
+    # 폼알데하이드·아릴아민/아조염료 등 섬유 유해물질 항목은 절대 숨기지 않음(요구사항).
+    # 전부 제거되어 빈 리스트가 되는 경우에는 안전장치로 원본을 유지한다.
+    def _is_heat_item(item_l: str) -> bool:
+        return any(t in item_l for t in _HEAT_SIGNAL_TOKENS)
+
+    def _is_strap_item(item_l: str) -> bool:
+        return any(t in item_l for t in _STRAP_SIGNAL_TOKENS)
+
+    filtered: List[str] = []
+    for item in items:
+        item_l = item.lower()
+        if _is_heat_item(item_l) and not show_heat_items:
+            continue
+        if _is_strap_item(item_l) and not has_strap_signal:
+            continue
+        filtered.append(item)
+    if not filtered:
+        filtered = items
 
     def _score(item: str) -> int:
         item_l = item.lower()
@@ -170,7 +190,7 @@ def _prioritize_checklist(
             return p_score  # priority 신호 있으면 depriority 패널티 무시
         return sum(-5 for kw in depriority_kw if kw in item_l)
 
-    return sorted(items, key=lambda x: -_score(x))
+    return sorted(filtered, key=lambda x: -_score(x))
 
 
 def generate_markdown_report(response: DiagnosisResponse) -> str:
@@ -383,16 +403,19 @@ def generate_markdown_report(response: DiagnosisResponse) -> str:
             md += f"**주요 인증기관**: {', '.join(kc.top_cert_organ_names)}\n\n"
 
         if kc.representative_models:
-            # 입력 제품 키워드와 겹치는 모델이 있는지 확인
-            _input_product = str(response.input_summary.get("product_name") or "").lower()
-            _input_query = str(response.input_summary.get("user_query") or "").lower()
-            _qwords = {w for w in (_input_product + " " + _input_query).split() if len(w) > 1}
-            _has_match = any(
-                any(kw in m.lower() for kw in _qwords)
-                for m in kc.representative_models
-            )
+            # 입력 제품 키워드(원문 단어 + 품목 키워드 그룹)와 실제로 관련 있는
+            # 모델이 있는지 확인 — kc_certification_service의 정렬 기준과 동일 로직 사용
+            _input_text = " ".join(filter(None, [
+                str(response.input_summary.get("product_name") or ""),
+                str(response.input_summary.get("user_query") or ""),
+                str(response.input_summary.get("material_text") or ""),
+            ]))
+            _has_match = has_relevant_representative_model(_input_text, kc.representative_models)
             if _has_match:
-                md += "**동일 품목군 대표 인증사례 (참고용, 관련도 순 정렬)**\n\n"
+                md += (
+                    "**동일 품목군 대표 인증사례 (참고용, 입력 제품명과 유사한 키워드가 "
+                    "포함된 사례 우선 표시)**\n\n"
+                )
             else:
                 md += "**동일 품목군 내 대표 인증사례 (참고용)**\n\n"
                 md += (
